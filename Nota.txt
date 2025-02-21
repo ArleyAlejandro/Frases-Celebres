@@ -1,0 +1,22 @@
+Nota
+
+- Habrán dos vistas
+	1. muestra todas las frases 
+	2. deja editar y agregar
+
+- El Tony tiene un botón para cargar los datos del xml en la base de datos.
+- Si borras un autor, se borran todas las frases. Pq hay una foreign key en autor. asi q primero debes borrar las frases.
+
+- Cuando se crean autores o frases, se guardan directamente en la bd.
+
+
+1- Primero hacer los dao, y la base de datos
+
+importante: 
+	tbl_frases -> table en base de datos	
+		id texto auto_id tema_id 
+	
+	Cuando se pase de la bd a un objeto, el id es propio de la bd, y el objeto usa el id para relacionarse con la base de datos. 
+	Hay una relación de agregación entre los autores y las frases 
+
+	hay q usar fetch object para asociar de alguna forma lo de las foreign key (no me acuerdo).
