@@ -5,8 +5,9 @@ class Autor{
     private $name;
     private $description;
     private $phrases;
+    private $url;
 
-    private function __construct(){}
+    public function __construct(){}
     
     public function __get($prop) {
         if (property_exists($this, $prop)) {

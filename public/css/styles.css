@@ -1,0 +1,75 @@
+body {
+	font-family: Arial, sans-serif;
+                    background-color: #f4f4f4;
+                    margin: 20px;
+                    text-align: center;
+                }
+                .container {
+                    width: 90%;
+                    max-width: 900px;
+                    margin: auto;
+                    background: #fff;
+                    padding: 20px;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                }
+                h1 {
+                    color: #333;
+                    margin-bottom: 20px;
+                }
+                .button-group {
+                    display: flex;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                    gap: 10px;
+                    margin-bottom: 20px;
+                }
+                button {
+                    padding: 10px 15px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-size: 14px;
+                    transition: 0.3s;
+                }
+                button:hover {
+                    opacity: 0.8;
+                }
+                .btn-add {
+                    background: #28a745;
+                    color: #fff;
+                    font-size: 16px;
+                }
+                .btn-reload {
+                    background: #007BFF;
+                    color: #fff;
+                }
+                .btn-nav {
+                    background: #17a2b8;
+                    color: #fff;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 10px;
+                }
+                thead {
+                    background: #007BFF;
+                    color: #fff;
+                }
+                th, td {
+                    padding: 12px;
+                    text-align: left;
+                    border-bottom: 1px solid #ddd;
+                }
+                tbody tr:hover {
+                    background: #f1f1f1;
+                }
+                .btn-edit {
+                    background: #ffc107;
+                    color: #333;
+                }
+                .btn-delete {
+                    background: #dc3545;
+                    color: #fff;
+                }

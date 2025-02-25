@@ -11,9 +11,7 @@ class DataBase
         $this->configuration = Config::getInstance();
         
         try {
-            $this->conn = new PDO(
-                'mysql:host=localhost
-                ;dbname=' . $this->configuration->getDbName(),
+            $this->conn = new PDO('mysql:host=localhost;dbname=' . $this->configuration->getDbName(),
                 $this->configuration->getName(),
                 $this->configuration->getPass(),
                 [
@@ -31,7 +29,7 @@ class DataBase
         if (is_null(self::$_instance)) {
             self::$_instance = new self();
         }
-        return self::$_instance;
+        return self::$_instance->conn;
     }
     
     public function getConnection()
