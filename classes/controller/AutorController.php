@@ -60,14 +60,20 @@ class AutorController
     {
         $this->getAutores();
 
+        // Si me llega por get, guardo el id, para mostrar la info del autor, 
+        // en los inputs mientras se edita
         if ($_SERVER["REQUEST_METHOD"] == "GET") {
             $this->author->__set("id", $params[0]);
         }
-
+        
+        // info del autor, a partir del id q me ha llegado por GET
         $authorInfo = $this->model->selectOne($this->author->__get("id"));
 
+        // Si me llega por POST, significa que se ha enviado el form de edición
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+            // Tengo un campo hidden en este form, para enviar un id (que es el mismo que 
+            // me ha llegado por get, se lo pasé a la vista).
             $this->author->__set("id", $params["id"]);
 
             if (empty($params["name"])) {
@@ -85,7 +91,7 @@ class AutorController
             }
 
             if (empty($this->author->errors)) {
-
+                // Aquí hago el update de los valores en la base de datos 
                 $this->model->update($this->author, $this->author->__get("id"));
                 header("Location: ?autor/show");
                 exit();
@@ -93,8 +99,17 @@ class AutorController
                 echo "Existen errores en el objeto autor.";
             }
         }
-
+        
+        // Muestro mi formulario de edición, le paso a la vista la lista 
+        // de autores, y la info del autor seleccionado al pulsar el botón editar
         $this->view->editForm($this->authorList, $authorInfo);
+    }
+    
+    public function deleteAutor($params){
+       
+       $id = $params[0];
+       $this->model->delete($id);
+       header("location: ?autor/show");
     }
 
     /**

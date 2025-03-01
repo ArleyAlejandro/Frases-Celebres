@@ -45,7 +45,8 @@ class AutorView
                                     <td>" . $autor["total_frases"] . "</td>
                                     <td>";
                     echo '<button class="btn-edit" onclick="location.href=\'?autor/editForm/' . $autor['id'] . '\'">Editar</button>';
-                    echo "<button class=\"btn-delete\"> Eliminar</button>
+                    echo "   <button class=\"btn-delete\" onclick=\"location.href='?autor/deleteAutor/" 
+                        . $autor['id'] ." '\"> Eliminar</button>
                                     </td>   
                                 </tr>
                             </tbody>";
@@ -144,11 +145,7 @@ class AutorView
         $name = $authorInfo[0]["name"];
         $description = $authorInfo[0]["description"];
         $id = $authorInfo[0]["id"];
-//         echo $id;
-//         echo "<pre>";
-//         var_dump($authorInfo);
-//         echo "</pre>";
-//         die;
+
         ?>
 
 <head>

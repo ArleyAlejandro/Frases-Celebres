@@ -52,7 +52,9 @@ class AutorModel{
     
     
     public function delete($id){
-        
+        $stmt = $this->connection->prepare('DELETE FROM autor WHERE id = :id');
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
     }
     
     /**
@@ -64,18 +66,13 @@ class AutorModel{
         $stmt->bindParam(':autorID', $autorID, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        //         SELECT count(id) as autor_id FROM frases_celebres.frase where autor_id like 3;
-        //         select * from frases_celebres.frase where autor_id like 3;
     }
     
     /**
      * Utilizo esta función para seleccionar un autor desde la base de datos, a partir 
-     * del id, lo necesitaba para mostrar la info del autor en los inputs tipo value, al editar
+     * del id, lo necesitaba para mostrar la info del autor en los inputs al editar.
      */
     public function selectOne($id){
-//         echo "llega este id en el modelo: ";
-//         var_dump($id); 
         $stmt = $this->connection->prepare("SELECT * FROM autor WHERE id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
