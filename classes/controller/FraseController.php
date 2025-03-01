@@ -39,7 +39,7 @@ class FraseController
     
     public function editForm($params){
         $vAutor = new AutorView();
-        $vAutor->editForm();
+        $vAutor->editionForm();
     }
 }
 

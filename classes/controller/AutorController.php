@@ -1,83 +1,113 @@
 <?php
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 
 class AutorController
 {
 
-    private $autores;
+    private $authorList;
+
+    private $model;
+
+    private $view;
+
+    private $author;
 
     public function __construct()
-    {}
+    {
+        $this->model = new AutorModel();
+        $this->view = new AutorView();
+        $this->author = new Autor();
+    }
 
     public function show($params = null)
     {
         $this->getAutores();
-
-        // echo "<pre>";
-        // var_dump($autores);
-        // echo "</pre>";
-
-        // echo "<pre>";
-        // var_dump($autores);
-        // echo "</pre>";
-
-        // foreach ($autores as $autor) {
-        // echo $autor["name"] . "<br>";
-        // }
-
-        $vAutor = new AutorView();
-        $vAutor->show($this->autores);
-
-        // if ($params == null) {
-        // echo "no params";
-        // }else{
-        // echo "<pre>";
-        // var_dump($params) ;
-        // echo "</pre>";
-        // }
+        $this->view->show($this->authorList);
     }
 
-    public function createForm($params)
+    public function form($params)
     {
         $this->getAutores();
 
-        $model = new AutorModel();
-        $autor = new Autor();
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        if (empty($params["name"])) {
-            $errors["name"] = "Campo 'name' obligatorio";
-        } else {
-            $name = filter_var($params["name"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $autor->__set("name", $name);
+            if (empty($params["name"])) {
+                $this->author->errors["name"] = "Campo obligatorio";
+            } else {
+                $name = filter_var($params["name"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $this->author->__set("name", $name);
+            }
+
+            if (empty($params["description"])) {
+                $this->author->errors["description"] = "Campo obligatorio";
+            } else {
+                $description = filter_var($params["description"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $this->author->__set("description", $description);
+            }
+
+            if (empty($this->author->errors)) {
+                $this->model->insert($this->author);
+                header("Location: ?autor/show");
+                exit();
+            }
         }
 
-        if (empty($params["description"])) {
-            $errors["description"] = "Campo 'description' obligatorio";
-        } else {
-            $description = filter_var($params["description"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $autor->__set("description", $description);
-        }
-
-        $vAutor = new AutorView();
-        $vAutor->createForm($this->autores);
+        $this->view->form($this->authorList, $this->author);
     }
 
     public function editForm($params)
     {
-        
         $this->getAutores();
-        
-        $vAutor = new AutorView();
-        $vAutor->editForm($this->autores);
+
+        if ($_SERVER["REQUEST_METHOD"] == "GET") {
+            $this->author->__set("id", $params[0]);
+        }
+
+        $authorInfo = $this->model->selectOne($this->author->__get("id"));
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+            $this->author->__set("id", $params["id"]);
+
+            if (empty($params["name"])) {
+                $this->author->errors["name"] = "Campo obligatorio";
+            } else {
+                $name = filter_var($params["name"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $this->author->__set("name", $name);
+            }
+
+            if (empty($params["description"])) {
+                $this->author->errors["description"] = "Campo obligatorio";
+            } else {
+                $description = filter_var($params["description"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $this->author->__set("description", $description);
+            }
+
+            if (empty($this->author->errors)) {
+
+                $this->model->update($this->author, $this->author->__get("id"));
+                header("Location: ?autor/show");
+                exit();
+            } else {
+                echo "Existen errores en el objeto autor.";
+            }
+        }
+
+        $this->view->editForm($this->authorList, $authorInfo);
     }
 
+    /**
+     * Devuelve la lista de autores con un campo extra, que indica la cantidad de frases que tiene
+     * asociadas dicho autor
+     */
     private function getAutores()
     {
-        $model = new AutorModel();
-        $this->autores = $model->selectAll();
+        $this->authorList = $this->model->selectAll();
 
-        foreach ($this->autores as &$autor) {
+        foreach ($this->authorList as &$autor) {
 
-            $totalFrases = $model->countPhrases($autor["id"]);
+            $totalFrases = $this->model->countPhrases($autor["id"]);
             $autor["total_frases"] = $totalFrases["total_frases"];
         }
     }

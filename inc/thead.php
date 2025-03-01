@@ -1,0 +1,9 @@
+<thead>
+		<tr>
+			<th>ID</th>
+			<th>Autor</th>
+			<th>Descripción</th>
+			<th>Num</th>
+			<th>Acciones</th>
+		</tr>
+</thead>

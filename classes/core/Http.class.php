@@ -27,7 +27,13 @@ class Http {
     }
     
     public function post(){
-        $this->controller->form($this->params);
+            $accion = $this->action;
+            if (method_exists($this->controller, $accion)) {
+                $this->controller->$accion($this->params);
+            } else {
+                throw new Exception("No existe la acción definida: $accion");
+            }
+
     }
 }
 

@@ -2,10 +2,13 @@
 
 class Autor{
     
+    private $id;
     private $name;
     private $description;
     private $phrases;
     private $url;
+    
+    public $errors = [];
 
     public function __construct(){}
     
