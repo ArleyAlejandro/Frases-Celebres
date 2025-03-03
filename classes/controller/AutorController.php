@@ -6,11 +6,8 @@ class AutorController
 {
 
     private $authorList;
-
     private $model;
-
     private $view;
-
     private $author;
 
     public function __construct()

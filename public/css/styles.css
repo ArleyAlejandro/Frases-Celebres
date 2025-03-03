@@ -69,9 +69,14 @@ thead {
 }
 
 th, td {
-	padding: 12px;
+	padding-inline:5px;
+	padding-block: 12px;
 	text-align: left;
 	border-bottom: 1px solid #ddd;
+}
+
+td:last-of-type{
+	white-space: nowrap;
 }
 
 tbody tr:hover {

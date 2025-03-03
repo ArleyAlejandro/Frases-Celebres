@@ -1,6 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
 
 class AutorModel{
     
@@ -8,10 +6,6 @@ class AutorModel{
     
     public function __construct(){
         $this->connection = DataBase::getInstance();
-//         echo "<pre>";
-//         var_dump($this->connection) ;
-//         echo "</pre>";
-//         die;
     }
     
     public function insert(Autor $autor){   
@@ -63,7 +57,7 @@ class AutorModel{
      */
     public function countPhrases($autorID) {
         $stmt = $this->connection->prepare("SELECT COUNT(id) as total_frases FROM frase WHERE autor_id = :autorID");
-        $stmt->bindParam(':autorID', $autorID, PDO::PARAM_INT);
+        $stmt->bindParam(':autorID', $autorID);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
