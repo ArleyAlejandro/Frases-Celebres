@@ -55,12 +55,13 @@ class TemaController{
         
         // info del autor, a partir del id q me ha llegado por GET
         $temaInfo = $this->model->selectOne($this->tema->__get("id"));
-//         echo "<pre>";
-//         var_dump($temaInfo);
-//         echo "</pre>";
+        // echo "<pre>";
+        // var_dump($temaInfo);
+        // echo "</pre>";
+        // die;
+
 //         echo $temaInfo->name;
         
-//         die;
         
         
         // Si me llega por POST, significa que se ha enviado el form de edición

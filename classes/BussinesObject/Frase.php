@@ -2,7 +2,10 @@
 
 class Frase
 {
-    private $name;
+    public $id;
+    public $autor;
+    public $tema;
+    public $texto;
     
     public $errors = [];
     
@@ -20,7 +23,7 @@ class Frase
         if (property_exists($this, $prop)) {
             $this->$prop = $val;
         }else{
-            throw new Exception("Propiedad inexistente");
+            throw new Exception("No se puede hacer Set, propiedad inexistente ".$prop);
         }
     }
    

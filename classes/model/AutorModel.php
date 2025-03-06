@@ -73,5 +73,12 @@ class AutorModel{
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
+//     public function selectOneByName($name){
+//         $stmt = $this->connection->prepare("SELECT * FROM autor WHERE name like :name");
+//         $stmt->bindParam(':name', $name);
+//         $stmt->execute();
+//         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+//     }
+    
 }
 
