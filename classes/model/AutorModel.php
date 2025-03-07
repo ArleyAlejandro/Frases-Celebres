@@ -8,8 +8,10 @@ class AutorModel{
         $this->connection = DataBase::getInstance();
     }
     
-    public function insert(Autor $autor){   
-        $name = $autor->__get("name");
+    public function insert(Autor $frase){   
+        $name = $frase->autor->__get("id");
+        echo $name;
+        die;
         $description = $autor->__get("description");
         
         $stmt =  $this->connection->prepare("INSERT INTO autor
@@ -73,12 +75,13 @@ class AutorModel{
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
-//     public function selectOneByName($name){
-//         $stmt = $this->connection->prepare("SELECT * FROM autor WHERE name like :name");
-//         $stmt->bindParam(':name', $name);
-//         $stmt->execute();
-//         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-//     }
+    public function selectOneByName($id) {
+        $stmt = $this->connection->prepare("SELECT * FROM autor WHERE id = :id LIMIT 1");
+        $stmt->bindParam(":id", $id, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    
     
 }
 

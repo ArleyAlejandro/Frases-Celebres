@@ -1,4 +1,5 @@
 <?php
+
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 class FraseController
@@ -25,72 +26,77 @@ class FraseController
         $this->fraseList = $this->model->selectAll();
         $this->view->show($this->fraseList);
 
-                // echo "<pre>";
-                // var_dump($this->fraseList);
-                // echo "</pre>";
-                // die;
+        // echo "<pre>";
+        // var_dump($this->fraseList);
+        // echo "</pre>";
+        // die;
     }
 
     public function form($params)
     {
-
-
         $this->fraseList = $this->model->selectAll();
         $temas = $this->temaModel->selectAll();
         $autores = $this->autorModel->selectAll();
 
-
-
-
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+            // echo "<pre>";
+            // var_dump($params);
+            // echo "</pre>";
+            // die;
 
             if (empty($params["name"])) {
                 $this->frase->errors["name"] = "Campo obligatorio";
             } else {
                 $frase = filter_var($params["name"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                $this->frase->__set("name", $frase);
-                //                 echo "ok";
+                $this->frase->__set("texto", $frase);
+                echo "name frase -> ok" . "<br>";
             }
 
 
             if (empty($params["author"])) {
                 $this->frase->errors["author"] = "Campo obligatorio";
             } else {
-                $author = filter_var($params["author"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                $this->frase->__set("author", $author);
+                echo "author frase -> ok" . "<br>";
+                $authorName = filter_var($params["author"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $authorData = $this->autorModel->selectOneByName($authorName);
 
-                //                 $author = $this->autorModel->selectOneByName($author);
-                //                $authorId = $author[0]["id"];
+                if ($authorData) {
+                    $autor = new Autor();
+                    $autor->__set("id", $authorData["id"]);
+                    $autor->__set("name", $authorData["name"]);
+                    $autor->__set("description", $authorData["description"]);
+                    $autor->__set("url", $authorData["url"]);
+                } else {
+                    $this->frase->errors["author"] = "El autor no existe.";
+                    return;
+                }
 
-                //                 $this->frase->__set("author_id", $authorId);
-
-                //                 echo "<pre>";
-                //                 var_dump($authorId);
-                //                 echo "</pre>";
-                //                 die;
-
+                $this->frase->__set("autor", $autor);
             }
+
 
 
             if (empty($params["topic"])) {
                 $this->frase->errors["topic"] = "Campo obligatorio";
             } else {
                 $frase = filter_var($params["topic"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                $this->frase->__set("topic", $frase);
+                $this->frase->__set("tema", $frase);
+                echo "tema frase -> ok" . "<br>";
             }
 
-
             if (empty($this->frase->errors)) {
+                // echo "<pre>";
+                // var_dump($this->frase);
+                // echo "</pre>";
+                // die;
+                // $autor_id = $this->frase->autor->__get("id");
+
                 $this->model->insert($this->frase);
                 header("Location: ?frase/show");
                 exit();
-                //                 echo "<pre>";
-                //                 var_dump($this->frase);
-                //                 echo "</pre>";
-                //                 die;
-
             } else {
-                echo "hay errores";
+                echo "Error al insertar";
             }
         }
 
@@ -102,50 +108,41 @@ class FraseController
     public function editForm($params)
     {
 
-
         $this->fraseList = $this->model->selectAll();
         $temas = $this->temaModel->selectAll();
         $autores = $this->autorModel->selectAll();
 
         if ($_SERVER["REQUEST_METHOD"] == "GET") {
-            // echo "<pre>";
-            // var_dump($params[0]);
-            // echo "</pre>";
-            // die;    
-            // $this->frase->__set("id", $params[0]);
+            $fraseId = (int) $params[0];
+        }
+        foreach ($this->fraseList as $key => $value) {
+
+            // Busco la frase en mi lista que tiene el mismo id, que 
+            // el id que me ha llegado por get, para mostrar su informacion
+            // en los inputs de la vista
+            if ($value) {
+                if ($value->id === $fraseId) {
+                    $this->frase->__set('id', $value->id);
+                    $this->frase->__set('texto', $value->texto);
+                    $this->frase->__set('tema', $value->tema);
+                    $this->frase->__set('autor', $value->autor);
+                } else {
+                    // echo "no hay coincidencia";
+                }
+            } else {
+                echo "no existe value";
+            }
         }
 
-        $fraseInfo = $this->model->selectOne($this->frase->__get("id"));
-        // $fraseInfo = $this->model->selectOne(1);
-
-        echo "<pre>";
-        var_dump($fraseInfo);
-        echo "</pre>";
-        die;
-
-        // var_dump($this->model->selectOne(1));
-
-        // echo "<pre>";
-        // var_dump($fraseInfo);
-
-        // die;
-
-        //                 echo 
-        //         die;
-        //         echo "<pre>";
-        //         echo $frase_id;
-        //         echo "</pre>";
-        //         die;
-
-
-
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+            $this->frase->__set("id", $params["id"]);
 
             if (empty($params["name"])) {
                 $this->frase->errors["name"] = "Campo obligatorio";
             } else {
-                $frase = filter_var($params["name"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                $this->frase->__set("name", $frase);
+                $fraseTexto = filter_var($params["name"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $this->frase->__set("texto", $fraseTexto);
                 //                 echo "ok";
             }
 
@@ -154,39 +151,25 @@ class FraseController
                 $this->frase->errors["author"] = "Campo obligatorio";
             } else {
                 $author = filter_var($params["author"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                $this->frase->__set("author", $author);
-
-                //                 $author = $this->autorModel->selectOneByName($author);
-                //                $authorId = $author[0]["id"];
-
-                //                 $this->frase->__set("author_id", $authorId);
-
-                //                 echo "<pre>";
-                //                 var_dump($authorId);
-                //                 echo "</pre>";
-                //                 die;
-
+                $autor = new Autor();
+                $autor->__set("id", $params["author"]);
+                $this->frase->__set("autor", $autor);
             }
 
 
             if (empty($params["topic"])) {
                 $this->frase->errors["topic"] = "Campo obligatorio";
             } else {
-                $frase = filter_var($params["topic"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                $this->frase->__set("topic", $frase);
+                $tema = filter_var($params["topic"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $this->frase->__set("tema", $tema);
             }
 
 
             if (empty($this->frase->errors)) {
-                // $this->model->insert($this->frase);
-                // header("Location: ?frase/show");
-                // exit();
-                //                 echo "<pre>";
-                //                 var_dump($this->frase);
-                //                 echo "</pre>";
-                //                 die;
-
-                echo "no hay errores";
+                $this->model->update($this->frase);
+                // echo "ok";
+                header("Location: ?frase/show");
+                exit();
             } else {
                 echo "hay errores";
             }
@@ -194,6 +177,13 @@ class FraseController
 
         // Mando una lista de autores y temas a la ista, para mostrarlos
         // en los inputs de tipo select.
-        $this->view->editForm($this->fraseList, $this->frase, $temas, $autores, $fraseInfo);
+        $this->view->editForm($this->fraseList, $this->frase, $temas, $autores);
+    }
+
+    public function deleteFrase($params)
+    {
+        $id = $params[0];
+        $this->model->delete($id);
+        header("location: ?frase/show");
     }
 }

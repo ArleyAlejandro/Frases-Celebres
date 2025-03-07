@@ -53,8 +53,8 @@ class FraseView
                                       <td>$autorNombre</td>
                                       <td>$temaNombre</td>
                                     <td>";
-                        echo '<button class="btn-edit" onclick="location.href=\'?frase/editForm/' . $fraseId. '\'">Editar</button>';
-                        echo "   <button class=\"btn-delete\" onclick=\"location.href='?frase/deleteAutor/" . 1 . " '\"> Eliminar</button>
+                        echo '<button class="btn-edit" onclick="location.href=\'?frase/editForm/' . $fraseId . '\'">Editar</button>';
+                        echo "   <button class=\"btn-delete\" onclick=\"location.href='?frase/deleteFrase/" . $fraseId . " '\"> Eliminar</button>
                                     </td>   
                                 </tr>
                             </tbody>";
@@ -190,15 +190,28 @@ class FraseView
     <?php
     }
 
-    public function editForm($frasesList, Frase $fraseObject, $temas, $autores, $fraseInfo)
+    public function editForm($frasesList, Frase $frase, $temas, $autores)
     {
-        $id = $fraseInfo->id;
+        // echo "<pre>";
+        // var_dump($frase);
+        // echo "</pre>";
+        // die;    
+
+
+        // echo $frase->texto . "<br>";
+        // echo "<br";
+        // echo $frase->tema . "<br>";
+        // echo "<br";
+        // echo $frase->autor->name . "<br>";
+        // echo $frase->autor->id . "<br>";
+        // echo "<br";
+        // die;
 
         // echo $id;
         // die;  
         // echo $id;
         // die;
-        $errors = $fraseObject->errors;
+        $errors = $frase->errors;
         // echo "<pre>";
         // var_dump($fraseInfo);
         // echo "</pre>";
@@ -236,9 +249,10 @@ class FraseView
                 </div>
 
                 <div class="form-container">
-                    <form action="?frase/form" method="POST">
+                    <form action="?frase/editForm" method="POST">
+                        <input type="hidden" name="id" value="<?php echo $frase->id ?>">
                         <label for="name">Nombre:</label>
-                        <input type="text" id="name" name="name" value="">
+                        <input type="text" id="name" name="name" value=" <?php echo $frase->texto; ?>">
                         <?php if (!empty($errors['name'])): ?>
                             <span class="error"><?= $errors['name'] ?></span>
                         <?php endif; ?>
@@ -248,8 +262,12 @@ class FraseView
                             <?php
 
                             foreach ($autores as $autor) {
-                                echo '<option value="' . $autor["id"] . '">' . $autor["name"] . '</option>';
+                                echo '<option value="' . $autor["id"] . '" ' .
+                                    (($autor["id"] == $frase->autor->id) ? 'selected' : '') . '>' .
+                                    $autor["name"] .
+                                    '</option>';
                             }
+
                             ?>
                         </select>
 
@@ -262,8 +280,12 @@ class FraseView
                             <?php
 
                             foreach ($temas as $tema) {
-                                echo '<option value="' . $tema["name"] . '">' . $tema["name"] . '</option>';
+                                echo '<option value="' . $tema["name"] . '" ' .
+                                    ($tema["name"] == $frase->tema ? 'selected' : '') . '>' .
+                                    $tema["name"] .
+                                    '</option>';
                             }
+
                             ?>
                         </select>
                         <?php if (!empty($errors['"topic"'])): ?>
@@ -286,24 +308,22 @@ class FraseView
 
                     <?php
                     foreach ($frasesList as $frase) {
-                        $fraseId = $frase["frase_id"];
-                        $autor = $frase["autor_nombre"];
-                        $tema = $frase["tema"];
-
-                        // var_dump($frase);
-
+                        $fraseId = $frase->id;
+                        $fraseTexto  =  $frase->texto;
+                        $autorNombre = $frase->autor->name;
+                        $temaNombre = $frase->tema;
 
                         echo " <tbody>
-                                <tr>
-                                    <td>" . $frase["texto"] . "</td>
-                                      <td>$autor</td>
-                                      <td>$tema</td>
-                                    <td>";
+                            <tr>
+                                <td>$fraseTexto</td>
+                                  <td>$autorNombre</td>
+                                  <td>$temaNombre</td>
+                                <td>";
                         echo '<button class="btn-edit" onclick="location.href=\'?frase/editForm/' . $fraseId . '\'">Editar</button>';
-                        echo "   <button class=\"btn-delete\" onclick=\"location.href='?frase/deleteAutor/" . $fraseId . " '\"> Eliminar</button>
-                                    </td>   
-                                </tr>
-                            </tbody>";
+                        echo "   <button class=\"btn-delete\" onclick=\"location.href='?frase/deleteFrase/" . $fraseId . " '\"> Eliminar</button>
+                                </td>   
+                            </tr>
+                        </tbody>";
                     }
                     ?>
 

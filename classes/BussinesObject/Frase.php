@@ -2,12 +2,11 @@
 
 class Frase
 {
-    public $id;
-    public $autor;
-    public $tema;
-    public $texto;
-    
-    public $errors = [];
+    private $id;
+    private $autor;
+    private $tema;
+    private $texto;
+    private $errors = [];
     
     public function __construct(){}
     
@@ -15,7 +14,7 @@ class Frase
         if (property_exists($this, $prop)) {
             return $this->$prop;
         }else{
-            throw new Exception("Propiedad inexistente");
+            throw new Exception("No se puede hacer Get, propiedad inexistente: ".$prop);
         }
     }
     
@@ -23,7 +22,7 @@ class Frase
         if (property_exists($this, $prop)) {
             $this->$prop = $val;
         }else{
-            throw new Exception("No se puede hacer Set, propiedad inexistente ".$prop);
+            throw new Exception("No se puede hacer Set, propiedad inexistente: ".$prop);
         }
     }
    
