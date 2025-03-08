@@ -1,5 +1,4 @@
 <?php
-
 class FraseView
 {
 
@@ -72,18 +71,7 @@ class FraseView
 
     public function form($frasesList, Frase $frase, $temas, $autores)
     {
-        //         $text = $fraseInfo -> id;
-        //         echo $text; die;
         $errors = $frase->errors;
-
-
-        // $autor = $autores[1]["name"];
-        // echo $autor;
-        // die;
-        // $frase = $fraseObject->__get('name');
-        // $description = $autor->__get('description');
-        // $errors = $frase->errors;
-
     ?>
 
         <head>
@@ -107,39 +95,48 @@ class FraseView
                     <button class="btn-nav" onclick="location.href='?frase/show'">Frases</button>
                 </div>
 
+                <!-- Form de agregar frases -->
                 <div class="form-container">
                     <form action="?frase/form" method="POST">
-                        <label for="name">Nombre:</label> <input type="text" id="name"
-                            name="name">
+
+                        <!-- Nombre de la frase -->
+                        <label for="name">Nombre:</label> <input type="text" id="name" name="name">
+
+                        <!-- Mensaje de error si existe -->
                         <?php if (!empty($errors['name'])): ?>
                             <span class="error"><?= $errors['name'] ?></span>
                         <?php endif; ?>
 
-                        <label for="author">Autor:</label> <select name="author"
-                            id="author-select">
+                        <!-- Nombre del autor -->
+                        <label for="author">Autor:</label> <select name="author" id="author-select">
                             <?php
 
+                            // select con lista de autores
                             foreach ($autores as $autor) {
-                                echo '<option value="' . $autor["id"] . '">' . $autor["name"] . '</option>';
+                                echo '<option value="' . $autor->id . '">' . $autor->name . '</option>';
                             }
                             ?>
                         </select>
 
+                        <!-- Mensaje de error si existe -->
                         <?php if (!empty($errors['author'])): ?>
                             <span class="error"><?= $errors['author'] ?></span>
                         <?php endif; ?>
 
-                        <label for="topic">Tema:</label> <select name="topic"
-                            id="topic">
+                        <!-- nombre de la frase -->
+                        <label for="topic">Tema:</label> <select name="topic" id="topic">
                             <?php
 
+                            // select con lista de temas
                             foreach ($temas as $tema) {
-                                echo '<option value="' . $tema["name"] . '">' . $tema["name"] . '</option>';
+                                echo '<option value="' . $tema->name . '">' . $tema->name . '</option>';
                             }
                             ?>
                         </select>
-                        <?php if (!empty($errors['"topic"'])): ?>
-                            <span class="error"><?= $errors['"topic"'] ?></span>
+
+                        <!-- Mensaje de error si existe -->
+                        <?php if (!empty($errors['topic'])): ?>
+                            <span class="error"><?= $errors['topic'] ?></span>
                         <?php endif; ?>
 
                         <button type="submit" class="btn-submit">Guardar</button>
@@ -163,10 +160,6 @@ class FraseView
                         $fraseTexto  =  $frase->texto;
                         $autorNombre = $frase->autor->name;
                         $temaNombre = $frase->tema;
-
-
-                        //             echo $frase_id;
-                        //             echo "<br>";
                         echo " <tbody>
                                 <tr>
                                     <td>$fraseTexto</td>
@@ -174,7 +167,7 @@ class FraseView
                                       <td>$temaNombre</td>
                                     <td>";
                         echo '<button class="btn-edit" onclick="location.href=\'?frase/editForm/' . $fraseId . '\'">Editar</button>';
-                        echo "   <button class=\"btn-delete\" onclick=\"location.href='?frase/deleteAutor/" . 1 . " '\"> Eliminar</button>
+                        echo "   <button class=\"btn-delete\" onclick=\"location.href='?frase/deleteAutor/" . $fraseId . " '\"> Eliminar</button>
                                     </td>   
                                 </tr>
                             </tbody>";
@@ -192,38 +185,7 @@ class FraseView
 
     public function editForm($frasesList, Frase $frase, $temas, $autores)
     {
-        // echo "<pre>";
-        // var_dump($frase);
-        // echo "</pre>";
-        // die;    
-
-
-        // echo $frase->texto . "<br>";
-        // echo "<br";
-        // echo $frase->tema . "<br>";
-        // echo "<br";
-        // echo $frase->autor->name . "<br>";
-        // echo $frase->autor->id . "<br>";
-        // echo "<br";
-        // die;
-
-        // echo $id;
-        // die;  
-        // echo $id;
-        // die;
         $errors = $frase->errors;
-        // echo "<pre>";
-        // var_dump($fraseInfo);
-        // echo "</pre>";
-        // die;    
-
-
-        // $autor = $autores[1]["name"];
-        // echo $autor;
-        // die;
-        // $frase = $fraseObject->__get('name');
-        // $description = $autor->__get('description');
-        // $errors = $frase->errors;
 
     ?>
 
@@ -262,9 +224,8 @@ class FraseView
                             <?php
 
                             foreach ($autores as $autor) {
-                                echo '<option value="' . $autor["id"] . '" ' .
-                                    (($autor["id"] == $frase->autor->id) ? 'selected' : '') . '>' .
-                                    $autor["name"] .
+                                echo '<option value="' . $autor->id. '" ' . (($autor->id == $frase->autor->id) ? 'selected' : '') . '>' .
+                                    $autor->name .
                                     '</option>';
                             }
 
@@ -280,16 +241,14 @@ class FraseView
                             <?php
 
                             foreach ($temas as $tema) {
-                                echo '<option value="' . $tema["name"] . '" ' .
-                                    ($tema["name"] == $frase->tema ? 'selected' : '') . '>' .
-                                    $tema["name"] .
-                                    '</option>';
+                                echo '<option value="' . $tema->name . '" ' . ($tema->name == $frase->tema ? 'selected' : '') . '>' .
+                                    $tema->name . '</option>';
                             }
 
                             ?>
                         </select>
-                        <?php if (!empty($errors['"topic"'])): ?>
-                            <span class="error"><?= $errors['"topic"'] ?></span>
+                        <?php if (!empty($errors['topic'])): ?>
+                            <span class="error"><?= $errors['topic'] ?></span>
                         <?php endif; ?>
 
                         <button type="submit" class="btn-submit">Guardar</button>

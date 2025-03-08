@@ -55,12 +55,4 @@ class TemaModel
         $params = [':TopicName' => $TopicName];
         return $this->connection->executeQuery($query, $params, PDO::FETCH_OBJ);
     }
-
-    // public function selectOne($id)
-    // {
-    //     $stmt = $this->connection->prepare("SELECT * FROM tema WHERE id = :id");
-    //     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    //     $stmt->execute();
-    //     return $stmt->fetchObject("Tema");
-    // }
 }

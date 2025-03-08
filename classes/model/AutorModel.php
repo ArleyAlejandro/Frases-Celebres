@@ -69,4 +69,10 @@ class AutorModel
 
         return $this->connection->executeQuery($query, $params, PDO::FETCH_OBJ);
     }
+
+    public function selectOne($id){
+        $query = "SELECT * FROM autor WHERE id = :id";
+        $params = [':id'=> $id];
+        return $this->connection->executeQuery($query, $params, PDO::FETCH_OBJ);
+    }
 }

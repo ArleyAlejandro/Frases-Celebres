@@ -15,13 +15,10 @@ class FraseModel
         $text = $frase->texto;
         $author = $frase->autor->id;
         $topic = $frase->tema;
-
-        $stmt =  $this->connection->prepare("INSERT INTO frase
-             (autor_id, texto, tema) VALUES (:autor_id, :texto, :tema)");
-        $stmt->bindParam('autor_id', $author);
-        $stmt->bindParam('texto', $text);
-        $stmt->bindParam('tema', $topic);
-        $stmt->execute();
+        $query = "INSERT INTO frase
+             (autor_id, texto, tema) VALUES (:autor_id, :texto, :tema)";
+        $params = ['autor_id' => $author, 'texto' => $text, 'tema' => $topic];
+        return $this->connection->executeQuery($query, $params);
     }
 
     public function update(Frase $frase)
@@ -32,31 +29,25 @@ class FraseModel
         $topic = $frase->tema;
         $author = $frase->autor->id;
 
-        $stmt = $this->connection->prepare('UPDATE frase SET
-        texto = :text,
-        tema = :tema,
-        autor_id = :autor_id
-        WHERE id = :id');
+        $query = 'UPDATE frase SET texto = :text, tema = :tema, autor_id = :autor_id
+        WHERE id = :id';
 
-        $stmt->bindParam(':text', $text);
-        $stmt->bindParam(':tema', $topic);
-        $stmt->bindParam(':autor_id', $author);
-        $stmt->bindParam(':id', $id);
-
-        return $stmt->execute();
+        $params = [':text'=> $text, ':tema'=> $topic, ':autor_id'=> $author,':id' => $id];
+        return $this->connection->executeQuery($query, $params);
     }
 
     public function selectAll()
     {
-        $stmt = $this->connection->prepare("
+
+        $query = "
             SELECT f.id AS frase_id, f.texto, f.tema, a.id AS autor_id, a.name AS autor_nombre, a.description AS autor_description, a.url AS autor_url 
             FROM frase f
-            INNER JOIN autor a ON f.autor_id = a.id
-        ");
-        $stmt->execute();
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            INNER JOIN autor a ON f.autor_id = a.id";
+
+        $results = $this->connection->executeQuery($query);
 
         $frases = [];
+
         foreach ($results as $row) {
             $autor = new Autor();
             $autor->__set('id', $row['autor_id']);
@@ -79,8 +70,14 @@ class FraseModel
 
     public function delete($id)
     {
-        $stmt = $this->connection->prepare('DELETE FROM frase WHERE id = :id');
-        $stmt->bindParam(':id', $id);
-        return $stmt->execute();
+        $query = 'DELETE FROM frase WHERE id = :id';
+        $params = [':id' => $id];
+        return $this->connection->executeQuery($query, $params, PDO::FETCH_OBJ);
     }
+    // public function selectOne($id)
+    // {
+    //     $query = "SELECT * FROM frase WHERE id = :id";
+    //     $params = [':id'=> $id];
+    //     return $this->connection->executeQuery($query, $params, PDO::FETCH_OBJ);
+    // }
 }

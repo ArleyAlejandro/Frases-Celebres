@@ -25,11 +25,6 @@ class FraseController
     {
         $this->fraseList = $this->model->selectAll();
         $this->view->show($this->fraseList);
-
-        // echo "<pre>";
-        // var_dump($this->fraseList);
-        // echo "</pre>";
-        // die;
     }
 
     public function form($params)
@@ -40,43 +35,21 @@ class FraseController
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-            // echo "<pre>";
-            // var_dump($params);
-            // echo "</pre>";
-            // die;
-
             if (empty($params["name"])) {
                 $this->frase->errors["name"] = "Campo obligatorio";
             } else {
                 $frase = filter_var($params["name"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 $this->frase->__set("texto", $frase);
-                echo "name frase -> ok" . "<br>";
             }
-
 
             if (empty($params["author"])) {
                 $this->frase->errors["author"] = "Campo obligatorio";
             } else {
-
-                echo "author frase -> ok" . "<br>";
                 $authorid = filter_var($params["author"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                $authorData = $this->autorModel->selectOne($authorid);
-                
-                if ($authorData) {
-                    $autor = new Autor();
-                    $autor->__set("id", $authorData["id"]);
-                    $autor->__set("name", $authorData["name"]);
-                    $autor->__set("description", $authorData["description"]);
-                    $autor->__set("url", $authorData["url"]);
-                } else {
-                    $this->frase->errors["author"] = "El autor no existe.";
-                    return;
-                }
-
+                $autor = new Autor();
+                $autor->__set("id", $authorid);
                 $this->frase->__set("autor", $autor);
             }
-
-
 
             if (empty($params["topic"])) {
                 $this->frase->errors["topic"] = "Campo obligatorio";
@@ -87,12 +60,6 @@ class FraseController
             }
 
             if (empty($this->frase->errors)) {
-                // echo "<pre>";
-                // var_dump($this->frase);
-                // echo "</pre>";
-                // die;
-                // $autor_id = $this->frase->autor->__get("id");
-
                 $this->model->insert($this->frase);
                 header("Location: ?frase/show");
                 exit();
@@ -131,9 +98,7 @@ class FraseController
                 } else {
                     // echo "no hay coincidencia";
                 }
-            } else {
-                echo "no existe value";
-            }
+            } 
         }
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
