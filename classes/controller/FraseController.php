@@ -57,10 +57,11 @@ class FraseController
             if (empty($params["author"])) {
                 $this->frase->errors["author"] = "Campo obligatorio";
             } else {
-                echo "author frase -> ok" . "<br>";
-                $authorName = filter_var($params["author"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                $authorData = $this->autorModel->selectOneByName($authorName);
 
+                echo "author frase -> ok" . "<br>";
+                $authorid = filter_var($params["author"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $authorData = $this->autorModel->selectOne($authorid);
+                
                 if ($authorData) {
                     $autor = new Autor();
                     $autor->__set("id", $authorData["id"]);
@@ -115,6 +116,7 @@ class FraseController
         if ($_SERVER["REQUEST_METHOD"] == "GET") {
             $fraseId = (int) $params[0];
         }
+
         foreach ($this->fraseList as $key => $value) {
 
             // Busco la frase en mi lista que tiene el mismo id, que 

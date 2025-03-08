@@ -60,11 +60,33 @@ class AutorController
         // Si me llega por get, guardo el id, para mostrar la info del autor, 
         // en los inputs mientras se edita
         if ($_SERVER["REQUEST_METHOD"] == "GET") {
-            $this->author->__set("id", $params[0]);
+            $authorId = (int) $params[0];
         }
-        
+
         // info del autor, a partir del id q me ha llegado por GET
-        $authorInfo = $this->model->selectOne($this->author->__get("id"));
+        // $authorInfo = $this->model->selectOne($this->author->__get("id"));
+
+        // Recorro la lista de autores, para mostrar la info del autor, en el input 
+        foreach ($this->authorList as $key => $value) {
+
+            // Busco la frase en mi lista que tiene el mismo id, que 
+            // el id que me ha llegado por get, para mostrar su informacion
+            // en los inputs de la vista
+            if ($value) {
+
+                if ($value->id === $authorId) {
+                    $this->author->__set('id', $value->id);
+                    $this->author->__set('name', $value->name);
+                    $this->author->__set('description', $value->description);
+                    $this->author->__set('phrases', $value->phrases);
+                    $this->author->__set('url', $value->url);
+                } else {
+                    // echo "no hay coincidencia";
+                }
+            } else {
+                echo "no existe value";
+            }
+        }
 
         // Si me llega por POST, significa que se ha enviado el form de edición
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -96,17 +118,17 @@ class AutorController
                 echo "Existen errores en el objeto autor.";
             }
         }
-        
+
         // Muestro mi formulario de edición, le paso a la vista la lista 
         // de autores, y la info del autor seleccionado al pulsar el botón editar
-        $this->view->editForm($this->authorList, $authorInfo);
+        $this->view->editForm($this->authorList, $this->author);
     }
-    
-    public function deleteAutor($params){
-       
-       $id = $params[0];
-       $this->model->delete($id);
-       header("location: ?autor/show");
+
+    public function deleteAutor($params)
+    {
+        $id = $params[0];
+        $this->model->delete($id);
+        header("location: ?autor/show");
     }
 
     /**
@@ -118,10 +140,14 @@ class AutorController
         $this->authorList = $this->model->selectAll();
 
         foreach ($this->authorList as &$autor) {
-
-            $totalFrases = $this->model->countPhrases($autor["id"]);
-            $autor["total_frases"] = $totalFrases["total_frases"];
+            /**
+             * Aquí cuento cuantas frases tiene en total cada autor,
+             *  esto lo uso para  mostrarlo visualmente en la tabla en la columna "NUM". 
+             */
+            $total_frases = $this->model->countPhrases($autor->id)->total_frases;
+            $autor->phrases = $total_frases;
+            // echo "el autor $autor->name tiene un total de $total_frases<br>";
         }
+        // die;
     }
 }
-

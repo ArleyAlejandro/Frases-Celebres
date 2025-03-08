@@ -55,14 +55,6 @@ class TemaController{
         
         // info del autor, a partir del id q me ha llegado por GET
         $temaInfo = $this->model->selectOne($this->tema->__get("id"));
-        // echo "<pre>";
-        // var_dump($temaInfo);
-        // echo "</pre>";
-        // die;
-
-//         echo $temaInfo->name;
-        
-        
         
         // Si me llega por POST, significa que se ha enviado el form de edición
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -102,20 +94,8 @@ class TemaController{
     
     private function getTemas(){
         $this->temaList = $this->model->selectAll();
-//         echo "<pre>";
-//         var_dump($this->temaList);
-//         echo "</pre>";
         
         foreach ($this->temaList as &$tema) {
-            
-//             echo $tema;
-//             echo "<pre>";
-//             var_dump($tema);
-//             echo "</pre>";
-            
-//             echo $tema["name"];
-//         die;
-//         echo $tema[0]["name"];
             
             $totalTemas = $this->model->countTopics($tema["name"]);
             $tema["total_frases"] = $totalTemas["total_frases"];

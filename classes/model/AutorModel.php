@@ -8,12 +8,11 @@ class AutorModel{
         $this->connection = DataBase::getInstance();
     }
     
-    public function insert(Autor $frase){   
-        $name = $frase->autor->__get("id");
-        echo $name;
-        die;
-        $description = $autor->__get("description");
-        
+    public function insert(Autor $author){   
+     
+        echo $name = $author->name;
+        echo $description = $author->description;
+
         $stmt =  $this->connection->prepare("INSERT INTO autor
              (name, description) VALUES (:name, :description)");
         $stmt->bindParam('name', $name);
@@ -24,7 +23,27 @@ class AutorModel{
     public function selectAll(){
         $stmt = $this->connection->prepare("SELECT * FROM autor");
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $authors = [];
+
+        foreach ($results as $row) {
+
+            $author = new Autor();
+            $author->__set('id', $row['id']);
+            $author->__set('name', $row['name']);
+            $author->__set('description', $row['description']);
+            $author->__set('url', $row['url']);
+
+            $authors[] = $author;
+        }
+
+        // echo "<pre>";
+        // var_dump($authors);
+        // echo "</pre>";
+        // die;
+
+        return $authors;
     }
     
     
@@ -61,21 +80,21 @@ class AutorModel{
         $stmt = $this->connection->prepare("SELECT COUNT(id) as total_frases FROM frase WHERE autor_id = :autorID");
         $stmt->bindParam(':autorID', $autorID);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetchObject();
     }
     
     /**
      * Utilizo esta función para seleccionar un autor desde la base de datos, a partir 
      * del id, lo necesitaba para mostrar la info del autor en los inputs al editar.
      */
-    public function selectOne($id){
-        $stmt = $this->connection->prepare("SELECT * FROM autor WHERE id = :id");
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+    // public function selectOne($id){
+    //     $stmt = $this->connection->prepare("SELECT * FROM autor WHERE id = :id");
+    //     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    //     $stmt->execute();
+    //     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // }
     
-    public function selectOneByName($id) {
+    public function selectOne($id) {
         $stmt = $this->connection->prepare("SELECT * FROM autor WHERE id = :id LIMIT 1");
         $stmt->bindParam(":id", $id, PDO::PARAM_STR);
         $stmt->execute();

@@ -48,15 +48,12 @@ class FraseModel
 
     public function selectAll()
     {
-        // Consulta que trae los datos de la frase junto con los datos del autor
         $stmt = $this->connection->prepare("
             SELECT f.id AS frase_id, f.texto, f.tema, a.id AS autor_id, a.name AS autor_nombre, a.description AS autor_description, a.url AS autor_url 
             FROM frase f
             INNER JOIN autor a ON f.autor_id = a.id
         ");
         $stmt->execute();
-
-        // Obtenemos todos los resultados de la consulta
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $frases = [];
