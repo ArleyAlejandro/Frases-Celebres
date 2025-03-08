@@ -12,9 +12,9 @@ class AutorController
 
     public function __construct()
     {
+        $this->author = new Autor();
         $this->model = new AutorModel();
         $this->view = new AutorView();
-        $this->author = new Autor();
     }
 
     public function show($params = null)
@@ -63,8 +63,6 @@ class AutorController
             $authorId = (int) $params[0];
         }
 
-        // info del autor, a partir del id q me ha llegado por GET
-        // $authorInfo = $this->model->selectOne($this->author->__get("id"));
 
         // Recorro la lista de autores, para mostrar la info del autor, en el input 
         foreach ($this->authorList as $key => $value) {

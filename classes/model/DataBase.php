@@ -29,8 +29,26 @@ class DataBase
         if (is_null(self::$_instance)) {
             self::$_instance = new self();
         }
-        return self::$_instance->conn;
+        return self::$_instance;
     }
+    
+    public function executeQuery($query, $params = [], $fetchMode = PDO::FETCH_ASSOC, $className = null)
+    {
+        $stmt = $this->conn->prepare($query);
+        
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+    
+        $stmt->execute();
+    
+        if ($fetchMode === PDO::FETCH_OBJ || $fetchMode === PDO::FETCH_CLASS) {
+            return $stmt->fetchObject($className);
+        }
+    
+        return $stmt->fetchAll($fetchMode);
+    }
+    
     
     public function getConnection()
     {

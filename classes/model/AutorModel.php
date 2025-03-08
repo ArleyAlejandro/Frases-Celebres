@@ -1,29 +1,30 @@
 <?php
 
-class AutorModel{
-    
+class AutorModel
+{
+
     private $connection;
-    
-    public function __construct(){
+
+    public function __construct()
+    {
         $this->connection = DataBase::getInstance();
     }
-    
-    public function insert(Autor $author){   
-     
-        echo $name = $author->name;
-        echo $description = $author->description;
 
-        $stmt =  $this->connection->prepare("INSERT INTO autor
-             (name, description) VALUES (:name, :description)");
-        $stmt->bindParam('name', $name);
-        $stmt->bindParam('description', $description);
-        $stmt->execute();
-    }   
-    
-    public function selectAll(){
-        $stmt = $this->connection->prepare("SELECT * FROM autor");
-        $stmt->execute();
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    public function insert(Autor $author)
+    {
+        $query = "INSERT INTO autor (name, description) VALUES (:name, :description)";
+        $params = [
+            ':name' => $author->name,
+            ':description' => $author->description
+        ];
+
+        return $this->connection->executeQuery($query, $params);
+    }
+
+    public function selectAll()
+    {
+        $query = "SELECT * FROM autor";
+        $results = $this->connection->executeQuery($query);
 
         $authors = [];
 
@@ -40,51 +41,36 @@ class AutorModel{
 
         return $authors;
     }
-    
-    
-    public function update(Autor $autor, $id) {
-      
-        $name = $autor->__get("name");
-        $description =  $autor->__get("description");
 
-        $stmt = $this->connection->prepare('UPDATE autor SET
-        name = :name,
-        description = :description
-        WHERE id = :id');
-        
-        $stmt->bindParam(':name', $name);
-        $stmt->bindParam(':description', $description);
-        $stmt->bindParam(':id', $id);
-        
-        return $stmt->execute();
+
+    public function update(Autor $autor, $id)
+    {
+
+        $query = "UPDATE autor SET name = :name, description = :description WHERE id = :id";
+        $params = [
+            ':name' => $autor->__get("name"),
+            ':description' => $autor->__get("description"),
+            ':id' => $id
+        ];
+    
+        return $this->connection->executeQuery($query, $params);
     }
+
+
+
+    public function delete($id)
+    {
+        $query = "DELETE FROM autor WHERE id = :id";
+        $params = [':id' => $id];
     
-    
-    
-    public function delete($id){
-        $stmt = $this->connection->prepare('DELETE FROM autor WHERE id = :id');
-        $stmt->bindParam(':id', $id);
-        return $stmt->execute();
+        return $this->connection->executeQuery($query, $params);
     }
-    
-    /**
-     * Uso esta función, para contar cuantas frases están asociadas a cada autor, y 
-     * mostrar esa cifra en la tabla de la vista (AuthorView)
-     */
-    public function countPhrases($autorID) {
-        $stmt = $this->connection->prepare("SELECT COUNT(id) as total_frases FROM frase WHERE autor_id = :autorID");
-        $stmt->bindParam(':autorID', $autorID);
-        $stmt->execute();
-        return $stmt->fetchObject();
+
+    public function countPhrases($autorID)
+    {
+        $query = "SELECT COUNT(id) as total_frases FROM frase WHERE autor_id = :autorID";
+        $params = [':autorID' => $autorID];
+
+        return $this->connection->executeQuery($query, $params, PDO::FETCH_OBJ);
     }
-    
-    public function selectOne($id) {
-        $stmt = $this->connection->prepare("SELECT * FROM autor WHERE id = :id LIMIT 1");
-        $stmt->bindParam(":id", $id, PDO::PARAM_STR);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-    
-    
 }
-
