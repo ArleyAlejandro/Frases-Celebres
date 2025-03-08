@@ -145,10 +145,10 @@ class TemaView
 	<?php
 	}
 
-	public function editForm($temaList, $temaInfo)
+	public function editForm($temaList, Tema $theme)
 	{
-		$id = $temaInfo->id;
-		$name = $temaInfo->name;
+		$id = $theme->id;
+		$name = $theme->name;
 
 	?>
 

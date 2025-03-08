@@ -2,7 +2,6 @@
 
 class AutorModel
 {
-
     private $connection;
 
     public function __construct()
@@ -10,22 +9,11 @@ class AutorModel
         $this->connection = DataBase::getInstance();
     }
 
-    public function insert(Autor $author)
-    {
-        $query = "INSERT INTO autor (name, description) VALUES (:name, :description)";
-        $params = [
-            ':name' => $author->name,
-            ':description' => $author->description
-        ];
-
-        return $this->connection->executeQuery($query, $params);
-    }
 
     public function selectAll()
     {
         $query = "SELECT * FROM autor";
         $results = $this->connection->executeQuery($query);
-
         $authors = [];
 
         foreach ($results as $row) {
@@ -42,17 +30,25 @@ class AutorModel
         return $authors;
     }
 
+    public function insert(Autor $author)
+    {
+        $query = "INSERT INTO autor (name, description) VALUES (:name, :description)";
+        $params = [
+            ':name' => $author->name,
+            ':description' => $author->description
+        ];
+
+        return $this->connection->executeQuery($query, $params);
+    }
 
     public function update(Autor $autor, $id)
     {
-
         $query = "UPDATE autor SET name = :name, description = :description WHERE id = :id";
         $params = [
             ':name' => $autor->__get("name"),
             ':description' => $autor->__get("description"),
             ':id' => $id
         ];
-    
         return $this->connection->executeQuery($query, $params);
     }
 
@@ -62,7 +58,7 @@ class AutorModel
     {
         $query = "DELETE FROM autor WHERE id = :id";
         $params = [':id' => $id];
-    
+
         return $this->connection->executeQuery($query, $params);
     }
 
