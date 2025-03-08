@@ -2,7 +2,7 @@
 
 class TemaController{
     
-    private $temaList;
+    private $themeList;
     private $model;
     private $view;
     private $tema;
@@ -17,7 +17,7 @@ class TemaController{
     public function show($params = null)
     {
         $this->getTemas();
-        $this->view->show($this->temaList);
+        $this->view->show($this->themeList);
     }
     
     public function form($params)
@@ -40,7 +40,7 @@ class TemaController{
             }
         }
         
-        $this->view->form($this->temaList, $this->tema);
+        $this->view->form($this->themeList, $this->tema);
     }
     
     public function editForm($params)
@@ -83,7 +83,7 @@ class TemaController{
         
         // Muestro mi formulario de edición, le paso a la vista la lista
         // de autores, y la info del autor seleccionado al pulsar el botón editar
-        $this->view->editForm($this->temaList, $temaInfo);
+        $this->view->editForm($this->themeList, $temaInfo);
     }
     
     public function deleteTema($params){
@@ -93,12 +93,12 @@ class TemaController{
     }
     
     private function getTemas(){
-        $this->temaList = $this->model->selectAll();
-        
-        foreach ($this->temaList as &$tema) {
-            
-            $totalTemas = $this->model->countTopics($tema["name"]);
-            $tema["total_frases"] = $totalTemas["total_frases"];
+        $this->themeList = $this->model->selectAll();
+
+        foreach ($this->themeList as &$tema) {
+            $themeName = $tema->name;
+            $totalPhrases = $this->model->countTopics($themeName)->total_frases;
+            $tema->totalPhrases = $totalPhrases;
         }
     }
     

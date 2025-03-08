@@ -38,11 +38,6 @@ class AutorModel{
             $authors[] = $author;
         }
 
-        // echo "<pre>";
-        // var_dump($authors);
-        // echo "</pre>";
-        // die;
-
         return $authors;
     }
     
@@ -82,17 +77,6 @@ class AutorModel{
         $stmt->execute();
         return $stmt->fetchObject();
     }
-    
-    /**
-     * Utilizo esta función para seleccionar un autor desde la base de datos, a partir 
-     * del id, lo necesitaba para mostrar la info del autor en los inputs al editar.
-     */
-    // public function selectOne($id){
-    //     $stmt = $this->connection->prepare("SELECT * FROM autor WHERE id = :id");
-    //     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    //     $stmt->execute();
-    //     return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    // }
     
     public function selectOne($id) {
         $stmt = $this->connection->prepare("SELECT * FROM autor WHERE id = :id LIMIT 1");

@@ -19,7 +19,19 @@ class TemaModel{
     public function selectAll(){
         $stmt = $this->connection->prepare("SELECT * FROM tema");
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        $themes = [];
+
+        foreach ($results as $row) {
+            $theme = new Tema();
+            $theme->__set("id",$row['id']);
+            $theme->__set("name",$row['name']);
+
+            $themes[] = $theme;
+        }
+
+        return $themes;
     }
     
     public function update(Tema $tema, $id) {
@@ -46,7 +58,7 @@ class TemaModel{
         $stmt = $this->connection->prepare("select COUNT(id) as total_frases from frase where tema like :TopicName;");
         $stmt->bindParam(':TopicName', $TopicName);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetchObject();
     }
     
     public function selectOne($id){

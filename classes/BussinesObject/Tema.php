@@ -4,6 +4,7 @@ class Tema{
     
     private $id;
     private $name;
+    private $totalPhrases;
     
     public $errors = [];
     
