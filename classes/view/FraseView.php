@@ -44,7 +44,7 @@ class FraseView
                         $fraseId = $frase->id;
                         $fraseTexto  =  $frase->texto;
                         $autorNombre = $frase->autor->name;
-                        $temaNombre = $frase->tema;
+                        $temaNombre = $frase->tema ?? "null";
 
                         echo " <tbody>
                                 <tr>
@@ -159,7 +159,7 @@ class FraseView
                         $fraseId = $frase->id;
                         $fraseTexto  =  $frase->texto;
                         $autorNombre = $frase->autor->name;
-                        $temaNombre = $frase->tema;
+                        $temaNombre = $frase->tema ?? "null";
                         echo " <tbody>
                                 <tr>
                                     <td>$fraseTexto</td>
@@ -270,7 +270,7 @@ class FraseView
                         $fraseId = $frase->id;
                         $fraseTexto  =  $frase->texto;
                         $autorNombre = $frase->autor->name;
-                        $temaNombre = $frase->tema;
+                        $temaNombre = $frase->tema ?? "null";
 
                         echo " <tbody>
                             <tr>
