@@ -2,7 +2,7 @@
 class FraseView
 {
 
-    public function show($frases)
+    public function show($frases, $actualPage, $totalPages)
     {
 
 ?>
@@ -61,6 +61,25 @@ class FraseView
                     ?>
 
                 </table>
+                <div class="pagination">
+                    <!-- Si no es la primera página, muestro el botón de anterior -->
+                    <?php if ($actualPage > 1): ?>
+                        <button onclick="location.href='?frase/show/<?= $actualPage - 1 ?>'">Anterior</button>
+                    <?php endif; ?>
+
+                    <span>Página <?= $actualPage ?> de <?= $totalPages ?></span>
+
+                    <!-- Si no es la primera página, muestro el botón de siguiente -->
+                    <?php if ($actualPage < $totalPages): ?>
+                        <button onclick="location.href='?frase/show/<?= $actualPage + 1 ?>'">Siguiente</button>
+                    <?php endif; ?>
+                    
+                    <form method="POST" action="">
+                        <label for="page">Buscar página</label>
+                        <input type="number" id="page" name="page" min="1" max="<?= $totalPages ?>" required>
+                        <button type="submit">Ir</button>
+                    </form>
+                </div>
             </div>
 
         </body>
@@ -224,7 +243,7 @@ class FraseView
                             <?php
 
                             foreach ($autores as $autor) {
-                                echo '<option value="' . $autor->id. '" ' . (($autor->id == $frase->autor->id) ? 'selected' : '') . '>' .
+                                echo '<option value="' . $autor->id . '" ' . (($autor->id == $frase->autor->id) ? 'selected' : '') . '>' .
                                     $autor->name .
                                     '</option>';
                             }

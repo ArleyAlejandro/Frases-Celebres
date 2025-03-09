@@ -21,19 +21,48 @@ class FraseController
         $this->view = new FraseView();
     }
 
-    public function show()
+    public function show($params = null)
     {
 
-        $this->fraseList = $this->model->selectAll();
+        /**
+         * Verificao si el número de página me llega por get o por post, si me llega por get significa que se ha hecho click en 
+         * un botón de siguiente o anterior, si llega por post significa que se ha introducido un número de página 
+         * manualmente en el input.
+         */
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Número de página específica que se ha introducido en el input
+            $actualPage = $params["page"];
+        }
+        if ($_SERVER["REQUEST_METHOD"] == "GET") {
+            // Página actual por parámetros desde la vista, o sino la inicializo como 1
+            $actualPage = isset($params[0]) ? (int)$params[0] : 1;
+        }
 
+        // Límite de páginas a mostrar
+        $limit = 10;
+        // Variable para decidir en sql a partir de q registro mostrar el límite
+        $offset = ($actualPage - 1) * $limit;
+        // Total de frases
+        $totalFrases = count($this->model->selectAll());
+        // Divido el total de frases por el límite para saber cuantas páginas me quedarán, además redondeo hacia arriba
+        $totalPages = ceil($totalFrases / $limit);
+
+        // Le paso al modelo el limit y offset, para q haga la consulta a la base de datos 
+        $this->fraseList = $this->model->selectAll($limit, $offset);
+        // Si recibo no recibo frases, cargo el xml
         if (!count($this->fraseList)) {
-                $this->model->loadDatabase();
-                self::readXmlFile();
-                $this->fraseList = $this->model->selectAll();
-                $this->view->show($this->fraseList);
-        } else {
-                $this->fraseList = $this->model->selectAll();
-                $this->view->show($this->fraseList);
+            $this->model->loadDatabase();
+            self::readXmlFile();
+            $this->fraseList = $this->model->selectAll($limit, $offset);
+            /**
+             * Paso a la vista la página actual y el total de páginas, para que los botones sepan que mandar por get.
+             * ya que al pasar de una página a la otra, estos valores se iran incrementando/decrementando
+             */
+            $this->view->show($this->fraseList, $actualPage, $totalPages);
+        }
+        // Si recibo frases, muestro la vista
+        else {
+            $this->view->show($this->fraseList, $actualPage, $totalPages);
         }
     }
 

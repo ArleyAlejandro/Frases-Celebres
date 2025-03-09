@@ -35,13 +35,20 @@ class FraseModel
         return $this->connection->executeQuery($query, $params);
     }
 
-    public function selectAll()
+    public function selectAll($limit = null, $offset = null)
     {
         $query = "
             SELECT f.id AS frase_id, f.texto, f.tema, a.id AS autor_id, a.name AS autor_nombre, a.description AS autor_description, a.url AS autor_url 
             FROM frase f
-            INNER JOIN autor a ON f.autor_id = a.id";
+            INNER JOIN autor a ON f.autor_id = a.id ";
 
+        // Si me llega un límit y un offset lo agrego a la query
+        if ($limit !== null) {
+            $query .= " LIMIT " . (int)$limit;
+        }
+        if ($offset !== null) {
+            $query .= " OFFSET " . (int)$offset;
+        }
         $results = $this->connection->executeQuery($query);
 
         $frases = [];
