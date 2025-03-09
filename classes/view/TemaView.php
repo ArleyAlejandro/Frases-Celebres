@@ -26,7 +26,7 @@ class TemaView
 				<div class="button-group">
 					<button class="btn-add" onclick="location.href='?tema/form'">Agregar
 						Tema</button>
-					<button class="btn-reload">Recargar</button>
+					<button class="btn-reload" onclick="location.href='?frase/loadDatabase'">Recargar</button>
 					<button class="btn-nav" onclick="location.href='?'">Autores</button>
 					<button class="btn-nav">Temas</button>
 					<button class="btn-nav" onclick="location.href='?frase/show'">Frases</button>
@@ -90,7 +90,7 @@ class TemaView
 				<div class="button-group">
 					<button class="btn-add" onclick="location.href='?tema/show'">Agregar
 						Tema</button>
-					<button class="btn-reload">Recargar</button>
+					<button class="btn-reload" onclick="location.href='?frase/loadDatabase'">Recargar</button>
 					<button class="btn-nav" onclick="location.href='?'">Autores</button>
 					<button class="btn-nav">Temas</button>
 					<button class="btn-nav" onclick="location.href='?frase/show'">Frases</button>
@@ -167,7 +167,7 @@ class TemaView
 				<div class="button-group">
 					<button class="btn-add" onclick="location.href='?tema/show'">Agregar
 						Tema</button>
-					<button class="btn-reload">Recargar</button>
+					<button class="btn-reload" onclick="location.href='?frase/loadDatabase'">Recargar</button>
 					<button class="btn-nav" onclick="location.href='?'">Autores</button>
 					<button class="btn-nav">Temas</button>
 					<button class="btn-nav" onclick="location.href='?frase/show'">Frases</button>

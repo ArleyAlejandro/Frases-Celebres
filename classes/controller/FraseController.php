@@ -154,6 +154,11 @@ class FraseController
         header("location: ?frase/show");
     }
 
+    /**
+     * Método para cargar el script de reinicio de la base de datos, además luego de volver a crear la base de datos
+     * llama al método que lee el xml e inserta los datos.
+     * @return void
+     */
     public function loadDatabase()
     {
         $this->model->loadDatabase();
@@ -181,6 +186,7 @@ class FraseController
         if (file_exists('../assets/frases.xml')) {
             $xmlObject =  simplexml_load_file('../assets/frases.xml');
 
+            // Bucle para recorrer el xml 
             foreach ($xmlObject as $value) {
                 // Desestructuro las variables del xml para que sea más legible el código 
                 $url = $value->attributes()->url;
@@ -206,7 +212,6 @@ class FraseController
                 if (!in_array($authorName, $authorList)) {
                     $author = new Autor();
                     $author->url = $url;
-
 
                     $author->name = $authorName;
                     $author->description = $authorDescription;
