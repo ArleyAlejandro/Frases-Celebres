@@ -27,7 +27,7 @@ class TemaView
 					<button class="btn-add" onclick="location.href='?tema/form'">Agregar
 						Tema</button>
 					<button class="btn-reload" onclick="location.href='?frase/loadDatabase'">Recargar</button>
-					<button class="btn-nav" onclick="location.href='?'">Autores</button>
+					<button class="btn-nav" onclick="location.href='?autor/show'">Autores</button>
 					<button class="btn-nav">Temas</button>
 					<button class="btn-nav" onclick="location.href='?frase/show'">Frases</button>
 				</div>
@@ -70,6 +70,7 @@ class TemaView
 
 	public function form($temaList, Tema $tema)
 	{
+
 		$name = $tema->__get('name');
 		$errors = $tema->errors;
 
@@ -91,7 +92,7 @@ class TemaView
 					<button class="btn-add" onclick="location.href='?tema/show'">Agregar
 						Tema</button>
 					<button class="btn-reload" onclick="location.href='?frase/loadDatabase'">Recargar</button>
-					<button class="btn-nav" onclick="location.href='?'">Autores</button>
+					<button class="btn-nav" onclick="location.href='?autor/show'">Autores</button>
 					<button class="btn-nav">Temas</button>
 					<button class="btn-nav" onclick="location.href='?frase/show'">Frases</button>
 				</div>
@@ -168,7 +169,7 @@ class TemaView
 					<button class="btn-add" onclick="location.href='?tema/show'">Agregar
 						Tema</button>
 					<button class="btn-reload" onclick="location.href='?frase/loadDatabase'">Recargar</button>
-					<button class="btn-nav" onclick="location.href='?'">Autores</button>
+					<button class="btn-nav" onclick="location.href='?autor/show'">Autores</button>
 					<button class="btn-nav">Temas</button>
 					<button class="btn-nav" onclick="location.href='?frase/show'">Frases</button>
 				</div>

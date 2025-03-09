@@ -31,6 +31,7 @@ class FraseController
     {
         $this->fraseList = $this->model->selectAll();
         $temas = $this->temaModel->selectAll();
+
         $autores = $this->autorModel->selectAll();
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -81,24 +82,21 @@ class FraseController
         $autores = $this->autorModel->selectAll();
 
         if ($_SERVER["REQUEST_METHOD"] == "GET") {
+            // Guardo el id de la frase que me ha llegado por GET
             $fraseId = (int) $params[0];
         }
 
-        foreach ($this->fraseList as $key => $value) {
+        foreach ($this->fraseList as $value) {
 
             // Busco la frase en mi lista que tiene el mismo id, que 
             // el id que me ha llegado por get, para mostrar su informacion
             // en los inputs de la vista
-            if ($value) {
                 if ($value->id === $fraseId) {
                     $this->frase->__set('id', $value->id);
                     $this->frase->__set('texto', $value->texto);
                     $this->frase->__set('tema', $value->tema);
                     $this->frase->__set('autor', $value->autor);
-                } else {
-                    // echo "no hay coincidencia";
                 }
-            }
         }
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -110,7 +108,6 @@ class FraseController
             } else {
                 $fraseTexto = filter_var($params["name"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 $this->frase->__set("texto", $fraseTexto);
-                //                 echo "ok";
             }
 
 
@@ -204,7 +201,7 @@ class FraseController
                  * Compruebo si el tema existe, para guardar todos los "nombres de temas" en un
                  * array, sin repetidos , luego recorreré este mismo array, y crearé los objetos
                  */
-                if (!in_array($themeName, $themeNames)) {
+                if ($themeName !== "" && !in_array($themeName, $themeNames)) {
                     $themeNames[] = $themeName;
                 }
 

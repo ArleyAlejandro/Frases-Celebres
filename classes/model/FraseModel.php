@@ -15,8 +15,7 @@ class FraseModel
         $text = $frase->texto;
         $author = $frase->autor->id;
         $topic = $frase->tema;
-        $query = "INSERT INTO frase
-             (autor_id, texto, tema) VALUES (:autor_id, :texto, :tema)";
+        $query = "INSERT INTO frase (autor_id, texto, tema) VALUES (:autor_id, :texto, :tema)";
         $params = ['autor_id' => $author, 'texto' => $text, 'tema' => $topic];
         return $this->connection->executeQuery($query, $params);
     }
@@ -115,10 +114,4 @@ class FraseModel
                     ) ;';
         return $this->connection->executeQuery($query);
     }
-    // public function selectOne($id)
-    // {
-    //     $query = "SELECT * FROM frase WHERE id = :id";
-    //     $params = [':id'=> $id];
-    //     return $this->connection->executeQuery($query, $params, PDO::FETCH_OBJ);
-    // }
 }

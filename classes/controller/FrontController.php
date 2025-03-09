@@ -1,7 +1,7 @@
 <?php
 
 class FrontController {
-    private const DEFAULT_CONTROLLER = "Autor";
+    private const DEFAULT_CONTROLLER = "Frase";
     private const DEFAULT_ACTION = "show";
     
     
