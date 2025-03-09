@@ -24,7 +24,7 @@ class FraseView
                 <div class="button-group">
                     <button class="btn-add" onclick="location.href='?frase/form'">Agregar
                         Frase</button>
-                    <button class="btn-reload">Recargar</button>
+                    <button class="btn-reload" onclick="location.href='?frase/loadDatabase'">Recargar</button>
                     <button class="btn-nav" onclick="location.href='?autor/show'">Autores</button>
                     <button class="btn-nav" onclick="location.href='?tema/show'">Temas</button>
                     <button class="btn-nav" onclick="location.href='?frase/show'">Frases</button>

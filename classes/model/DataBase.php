@@ -54,6 +54,12 @@ class DataBase
     {
         return $this->conn;
     }
+
+    public function getLastInsertId()
+{
+    return $this->conn->lastInsertId();
+}
+
     
     public function closeConnection()
     {

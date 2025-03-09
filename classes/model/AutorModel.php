@@ -75,4 +75,8 @@ class AutorModel
         $params = [':id'=> $id];
         return $this->connection->executeQuery($query, $params, PDO::FETCH_OBJ);
     }
+
+    public function getLastInsertId(){
+       return $this->connection->getLastInsertId();
+    }
 }

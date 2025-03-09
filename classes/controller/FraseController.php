@@ -24,7 +24,6 @@ class FraseController
     public function show()
     {
         $this->fraseList = $this->model->selectAll();
-        self::readXmlFile();
         $this->view->show($this->fraseList);
     }
 
@@ -154,37 +153,47 @@ class FraseController
         $this->model->delete($id);
         header("location: ?frase/show");
     }
+
+    public function loadDatabase()
+    {
+        $this->model->loadDatabase();
+        self::readXmlFile();
+        $this->show();
+    }
+
+
     /**
      * Método que se encarga de leer el xml, e insertar la información en la base de datos 
      * @return void
      */
     public function readXmlFile()
-    {   
+    {
         // Lista de objetos Autor para insertar
         $authorList = [];
         // Lista de los nombres de temas sin repetidos
-        $themeNames = []; 
+        $themeNames = [];
         // Lista de objetos Tema para insertar
-        $themeList = []; 
+        $themeList = [];
+        // Lista de objetos Frase para insertar
+        $phrasesList = [];
 
         // Compruebo si el fichero existe 
         if (file_exists('../assets/frases.xml')) {
             $xmlObject =  simplexml_load_file('../assets/frases.xml');
 
             foreach ($xmlObject as $value) {
+                // Desestructuro las variables del xml para que sea más legible el código 
                 $url = $value->attributes()->url;
                 $authorName = $value->nombre;
                 $authorDescription = $value->descripcion;
                 $authorTotalPhrases = count($value->frases->frase);
-
-                $phraseText = $value->frases->frase->texto;
 
                 /**
                  *  Estaba teniendo problemas de repetidos por no convertir a String los nonbres de temas, 
                  * la función in_array no estaba analizando bien los datos de la lista 
                  */
                 $themeName = (string) $value->frases->frase->tema;
-                
+
                 /**
                  * Compruebo si el tema existe, para guardar todos los "nombres de temas" en un
                  * array, sin repetidos , luego recorreré este mismo array, y crearé los objetos
@@ -197,42 +206,45 @@ class FraseController
                 if (!in_array($authorName, $authorList)) {
                     $author = new Autor();
                     $author->url = $url;
+
+
                     $author->name = $authorName;
                     $author->description = $authorDescription;
                     $author->phrases = $authorTotalPhrases;
 
-                    array_push($authorList, $author);
-                } 
+                    $this->autorModel->insert($author);
+                    $author->id = $this->autorModel->getLastInsertId();
 
+                    /**
+                     * En cada autor, recorro sus frases, y creo los objetos Frase
+                     * para asociar cada frase a un autor
+                     */
+                    foreach ($value->frases->frase as $p) {
+                        $phrase = new Frase();
+                        $phrase->texto = (string) $p->texto;
+                        $phrase->tema = $value->frases->frase->tema;
+                        $phrase->autor = $author;
+                        $phrasesList[] = $phrase;
+                    }
+
+                    array_push($authorList, $author);
+                }
             }
 
             // Aquí recorro el array que no tiene temas repetidos, y creo los objetos
             foreach ($themeNames as $themeName) {
                 $theme = new Tema();
                 $theme->name = $themeName;
+                $this->temaModel->insert($theme);
                 array_push($themeList, $theme);
             }
 
-            $this->insertXmlInfo($authorList, $themeList);
-
-            // echo "<pre>";
-            // var_dump($themeList);
-            // echo "</pre>";
-            // die;
-            
+            foreach ($phrasesList as $phrase) {
+                // Guardo las frases en una lista que usaré para insertar en la BD
+                $this->model->insert($phrase);
+            }
         } else {
             echo "archivo no encontrado";
-        }
-    }
-
-    public function insertXmlInfo($authorList, $themeList)
-    {
-        foreach ($authorList as $author) {
-            $this->autorModel->insert($author);
-        }
-
-        foreach ($themeList as $theme) {
-            $this->temaModel->insert($theme);
         }
     }
 }
