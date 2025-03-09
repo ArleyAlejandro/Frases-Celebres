@@ -37,7 +37,6 @@ class FraseModel
 
     public function selectAll()
     {
-
         $query = "
             SELECT f.id AS frase_id, f.texto, f.tema, a.id AS autor_id, a.name AS autor_nombre, a.description AS autor_description, a.url AS autor_url 
             FROM frase f

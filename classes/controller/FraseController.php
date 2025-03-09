@@ -23,8 +23,18 @@ class FraseController
 
     public function show()
     {
+
         $this->fraseList = $this->model->selectAll();
-        $this->view->show($this->fraseList);
+
+        if (!count($this->fraseList)) {
+                $this->model->loadDatabase();
+                self::readXmlFile();
+                $this->fraseList = $this->model->selectAll();
+                $this->view->show($this->fraseList);
+        } else {
+                $this->fraseList = $this->model->selectAll();
+                $this->view->show($this->fraseList);
+        }
     }
 
     public function form($params)
@@ -91,12 +101,12 @@ class FraseController
             // Busco la frase en mi lista que tiene el mismo id, que 
             // el id que me ha llegado por get, para mostrar su informacion
             // en los inputs de la vista
-                if ($value->id === $fraseId) {
-                    $this->frase->__set('id', $value->id);
-                    $this->frase->__set('texto', $value->texto);
-                    $this->frase->__set('tema', $value->tema);
-                    $this->frase->__set('autor', $value->autor);
-                }
+            if ($value->id === $fraseId) {
+                $this->frase->__set('id', $value->id);
+                $this->frase->__set('texto', $value->texto);
+                $this->frase->__set('tema', $value->tema);
+                $this->frase->__set('autor', $value->autor);
+            }
         }
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
