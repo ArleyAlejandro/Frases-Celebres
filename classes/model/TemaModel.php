@@ -9,9 +9,16 @@ class TemaModel
         $this->connection = DataBase::getInstance();
     }
 
-    public function selectAll()
+    public function selectAll($limit = null, $offset = null)
     {
         $query = "SELECT * FROM tema";
+         // Si me llega un límit y un offset lo agrego a la query
+         if ($limit !== null) {
+            $query .= " LIMIT " . (int)$limit;
+        }
+        if ($offset !== null) {
+            $query .= " OFFSET " . (int)$offset;
+        }
         $results = $this->connection->executeQuery($query);
         $themes = [];
 

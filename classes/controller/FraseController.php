@@ -11,6 +11,10 @@ class FraseController
     private $model;
     private $view;
     private $frase;
+    private $limit;
+    private $offset;
+    private $actualPage;
+    private $totalPages;
 
     public function __construct()
     {
@@ -25,52 +29,52 @@ class FraseController
     {
 
         /**
-         * Verificao si el número de página me llega por get o por post, si me llega por get significa que se ha hecho click en 
+         * Verifico si el número de página me llega por get o por post, si me llega por get significa que se ha hecho click en 
          * un botón de siguiente o anterior, si llega por post significa que se ha introducido un número de página 
          * manualmente en el input.
          */
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Número de página específica que se ha introducido en el input
-            $actualPage = $params["page"];
+            $this->actualPage = $params["page"];
         }
         if ($_SERVER["REQUEST_METHOD"] == "GET") {
             // Página actual por parámetros desde la vista, o sino la inicializo como 1
-            $actualPage = isset($params[0]) ? (int)$params[0] : 1;
+            $this->actualPage = isset($params[0]) ? (int)$params[0] : 1;
         }
 
         // Límite de páginas a mostrar
-        $limit = 10;
+        $this->limit = 10;
         // Variable para decidir en sql a partir de q registro mostrar el límite
-        $offset = ($actualPage - 1) * $limit;
+        $this->offset = ($this->actualPage - 1) * $this->limit;
         // Total de frases
         $totalFrases = count($this->model->selectAll());
         // Divido el total de frases por el límite para saber cuantas páginas me quedarán, además redondeo hacia arriba
-        $totalPages = ceil($totalFrases / $limit);
+        $this->totalPages = ceil($totalFrases / $this->limit);
 
-        // Le paso al modelo el limit y offset, para q haga la consulta a la base de datos 
-        $this->fraseList = $this->model->selectAll($limit, $offset);
+        // Le paso al modelo el limit y this->offset, para q haga la consulta a la base de datos 
+        $this->fraseList = $this->model->selectAll($this->limit, $this->offset);
         // Si recibo no recibo frases, cargo el xml
         if (!count($this->fraseList)) {
             $this->model->loadDatabase();
             self::readXmlFile();
-            $this->fraseList = $this->model->selectAll($limit, $offset);
+            $this->fraseList = $this->model->selectAll($this->limit, $this->offset);
             /**
              * Paso a la vista la página actual y el total de páginas, para que los botones sepan que mandar por get.
              * ya que al pasar de una página a la otra, estos valores se iran incrementando/decrementando
              */
-            $this->view->show($this->fraseList, $actualPage, $totalPages);
+            $this->view->show($this->fraseList, $this->actualPage, $this->totalPages);
         }
         // Si recibo frases, muestro la vista
         else {
-            $this->view->show($this->fraseList, $actualPage, $totalPages);
+            $this->view->show($this->fraseList, $this->actualPage, $this->totalPages);
         }
     }
 
     public function form($params)
     {
-        $this->fraseList = $this->model->selectAll();
-        $temas = $this->temaModel->selectAll();
 
+        $this->fraseList = $this->model->selectAll($this->limit, $this->offset);
+        $temas = $this->temaModel->selectAll();
         $autores = $this->autorModel->selectAll();
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {

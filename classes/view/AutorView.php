@@ -7,7 +7,7 @@ class AutorView
 
 	public function __construct() {}
 
-	public function show($autores)
+	public function show($autores, $actualPage, $totalPages)
 	{
 ?>
 		<!DOCTYPE html>
@@ -61,6 +61,25 @@ class AutorView
 					?>
 
 				</table>
+				<div class="pagination">
+                    <!-- Si no es la primera página, muestro el botón de anterior -->
+                    <?php if ($actualPage > 1): ?>
+                        <button onclick="location.href='?autor/show/<?= $actualPage - 1 ?>'">Anterior</button>
+                    <?php endif; ?>
+
+                    <span>Página <?= $actualPage ?> de <?= $totalPages ?></span>
+
+                    <!-- Si no es la primera página, muestro el botón de siguiente -->
+                    <?php if ($actualPage < $totalPages): ?>
+                        <button onclick="location.href='?autor/show/<?= $actualPage + 1 ?>'">Siguiente</button>
+                    <?php endif; ?>
+                    
+                    <form method="POST" action="">
+                        <label for="page">Buscar página</label>
+                        <input type="number" id="page" name="page" min="1" max="<?= $totalPages ?>" required>
+                        <button type="submit">Ir</button>
+                    </form>
+                </div>
 			</div>
 
 		</body>
@@ -69,7 +88,7 @@ class AutorView
 	<?php
 	}
 
-	public function form($authorList, Autor $autor)
+	public function form($authorList, Autor $autor, $actualPage, $totalPages)
 	{
 		$name = $autor->name;
 		$description = $autor->description;
@@ -144,6 +163,7 @@ class AutorView
 					}
 					?>
 				</table>
+				
 			</div>
 
 		</body>
@@ -152,7 +172,7 @@ class AutorView
 	<?php
 	}
 
-	public function editForm($authorList, $author)
+	public function editForm($authorList, $author, $actualPage, $totalPages)
 	{
 		$id = $author->id;
 		$name = $author->name;

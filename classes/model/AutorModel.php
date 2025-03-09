@@ -10,9 +10,18 @@ class AutorModel
     }
 
 
-    public function selectAll()
+    public function selectAll($limit = null, $offset = null)
     {
         $query = "SELECT * FROM autor";
+
+        // Si me llega un límit y un offset lo agrego a la query
+        if ($limit !== null) {
+            $query .= " LIMIT " . (int)$limit;
+        }
+        if ($offset !== null) {
+            $query .= " OFFSET " . (int)$offset;
+        }
+
         $results = $this->connection->executeQuery($query);
         $authors = [];
 
@@ -70,13 +79,15 @@ class AutorModel
         return $this->connection->executeQuery($query, $params, PDO::FETCH_OBJ);
     }
 
-    public function selectOne($id){
+    public function selectOne($id)
+    {
         $query = "SELECT * FROM autor WHERE id = :id";
-        $params = [':id'=> $id];
+        $params = [':id' => $id];
         return $this->connection->executeQuery($query, $params, PDO::FETCH_OBJ);
     }
 
-    public function getLastInsertId(){
-       return $this->connection->getLastInsertId();
+    public function getLastInsertId()
+    {
+        return $this->connection->getLastInsertId();
     }
 }

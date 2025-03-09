@@ -162,38 +162,7 @@ class FraseView
                     </form>
                 </div>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Frase</th>
-                            <th>Autor</th>
-                            <th>Tema</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-
-                    <?php
-                    foreach ($frasesList as $frase) {
-
-                        $fraseId = $frase->id;
-                        $fraseTexto  =  $frase->texto;
-                        $autorNombre = $frase->autor->name;
-                        $temaNombre = $frase->tema ?? "null";
-                        echo " <tbody>
-                                <tr>
-                                    <td>$fraseTexto</td>
-                                      <td>$autorNombre</td>
-                                      <td>$temaNombre</td>
-                                    <td>";
-                        echo '<button class="btn-edit" onclick="location.href=\'?frase/editForm/' . $fraseId . '\'">Editar</button>';
-                        echo "   <button class=\"btn-delete\" onclick=\"location.href='?frase/deleteAutor/" . $fraseId . " '\"> Eliminar</button>
-                                    </td>   
-                                </tr>
-                            </tbody>";
-                    }
-                    ?>
-
-                </table>
+               
             </div>
 
         </body>
@@ -273,39 +242,6 @@ class FraseView
                         <button type="submit" class="btn-submit">Guardar</button>
                     </form>
                 </div>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Frase</th>
-                            <th>Autor</th>
-                            <th>Tema</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-
-                    <?php
-                    foreach ($frasesList as $frase) {
-                        $fraseId = $frase->id;
-                        $fraseTexto  =  $frase->texto;
-                        $autorNombre = $frase->autor->name;
-                        $temaNombre = $frase->tema ?? "null";
-
-                        echo " <tbody>
-                            <tr>
-                                <td>$fraseTexto</td>
-                                  <td>$autorNombre</td>
-                                  <td>$temaNombre</td>
-                                <td>";
-                        echo '<button class="btn-edit" onclick="location.href=\'?frase/editForm/' . $fraseId . '\'">Editar</button>';
-                        echo "   <button class=\"btn-delete\" onclick=\"location.href='?frase/deleteFrase/" . $fraseId . " '\"> Eliminar</button>
-                                </td>   
-                            </tr>
-                        </tbody>";
-                    }
-                    ?>
-
-                </table>
             </div>
 
         </body>

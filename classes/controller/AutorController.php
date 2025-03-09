@@ -9,6 +9,10 @@ class AutorController
     private $model;
     private $view;
     private $author;
+    private $limit;
+    private $offset;
+    private $actualPage;
+    private $totalPages;
 
     public function __construct()
     {
@@ -19,13 +23,53 @@ class AutorController
 
     public function show($params = null)
     {
-        $this->getAutores();
-        $this->view->show($this->authorList);
+
+         /**
+         * Verifico si el número de página me llega por get o por post, si me llega por get significa que se ha hecho click en 
+         * un botón de siguiente o anterior, si llega por post significa que se ha introducido un número de página 
+         * manualmente en el input.
+         */
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Número de página específica que se ha introducido en el input
+            $this->actualPage = $params["page"];
+        }
+        if ($_SERVER["REQUEST_METHOD"] == "GET") {
+            // Página actual por parámetros desde la vista, o sino la inicializo como 1
+            $this->actualPage = isset($params[0]) ? (int)$params[0] : 1;
+        }
+
+        // Límite de páginas a mostrar
+        $this->limit = 10;
+        // Variable para decidir en sql a partir de q registro mostrar el límite
+        $this->offset = ($this->actualPage - 1) * $this->limit;
+        // Total de frases
+        $totalFrases = count($this->model->selectAll());
+        // Divido el total de frases por el límite para saber cuantas páginas me quedarán, además redondeo hacia arriba
+        $this->totalPages = ceil($totalFrases / $this->limit);
+
+        $this->getAutores($this->limit, $this->offset);
+        $this->view->show($this->authorList, $this->actualPage, $this->totalPages);
     }
 
     public function form($params)
     {
-        $this->getAutores();
+
+        if ($_SERVER["REQUEST_METHOD"] == "GET") {
+            // Página actual por parámetros desde la vista, o sino la inicializo como 1
+            $this->actualPage = isset($params[0]) ? (int)$params[0] : 1;
+        }
+
+        // Límite de páginas a mostrar
+        $this->limit = 10;
+        // Variable para decidir en sql a partir de q registro mostrar el límite
+        $this->offset = ($this->actualPage - 1) * $this->limit;
+        // Total de frases
+        $totalFrases = count($this->model->selectAll());
+        // Divido el total de frases por el límite para saber cuantas páginas me quedarán, además redondeo hacia arriba
+        $this->totalPages = ceil($totalFrases / $this->limit);
+
+
+        $this->getAutores($this->limit, $this->offset);
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -50,7 +94,7 @@ class AutorController
             }
         }
 
-        $this->view->form($this->authorList, $this->author);
+        $this->view->form($this->authorList, $this->author, $this->actualPage, $this->totalPages);
     }
 
     public function editForm($params)
@@ -119,7 +163,7 @@ class AutorController
 
         // Muestro mi formulario de edición, le paso a la vista la lista 
         // de autores, y la info del autor seleccionado al pulsar el botón editar
-        $this->view->editForm($this->authorList, $this->author);
+        $this->view->editForm($this->authorList, $this->author, $this->actualPage, $this->totalPages);
     }
 
     public function deleteAutor($params)
@@ -133,9 +177,9 @@ class AutorController
      * Devuelve la lista de autores con un campo extra, que indica la cantidad de frases que tiene
      * asociadas dicho autor
      */
-    private function getAutores()
+    private function getAutores($limit=null, $offset=null)
     {
-        $this->authorList = $this->model->selectAll();
+        $this->authorList = $this->model->selectAll($limit, $offset);
 
         foreach ($this->authorList as &$autor) {
             /**
