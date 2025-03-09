@@ -29,7 +29,7 @@ class AutorView
 					<button class="btn-add" onclick="location.href='?autor/form'">Agregar
 						Autor</button>
 					<button class="btn-reload" onclick="location.href='?frase/loadDatabase'">Recargar</button>
-					<button class="btn-nav">Autores</button>
+					<button class="btn-nav" onclick="location.href='?autor/show'">Autores</button>
 					<button class="btn-nav" onclick="location.href='?tema/show'">Temas</button>
 					<button class="btn-nav" onclick="location.href='?frase/show'">Frases</button>
 				</div>
@@ -111,7 +111,7 @@ class AutorView
 					<button class="btn-add" onclick="location.href='?autor/show'">Agregar
 						Autor</button>
 					<button class="btn-reload" onclick="location.href='?frase/loadDatabase'">Recargar</button>
-					<button class="btn-nav">Autores</button>
+					<button class="btn-nav" onclick="location.href='?autor/show'">Autores</button>
 					<button class="btn-nav" onclick="location.href='?tema/show'">Temas</button>
 					<button class="btn-nav" onclick="location.href='?frase/show'">Frases</button>
 				</div>
@@ -165,7 +165,7 @@ class AutorView
 					<button class="btn-add" onclick="location.href='?autor/show'">
 						Agregar Autor</button>
 					<button class="btn-reload" onclick="location.href='?frase/loadDatabase'">Recargar</button>
-					<button class="btn-nav">Autores</button>
+					<button class="btn-nav" onclick="location.href='?autor/show'">Autores</button>
 					<button class="btn-nav" onclick="location.href='?tema/show'">Temas</button>
 					<button class="btn-nav" onclick="location.href='?frase/show'">Frases</button>
 				</div>

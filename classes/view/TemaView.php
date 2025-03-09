@@ -5,7 +5,7 @@ class TemaView
 
 	public function __construct() {}
 
-	public function show($temas)
+	public function show($temas, $actualPage, $totalPages)
 	{
 ?>
 		<!DOCTYPE html>
@@ -28,7 +28,7 @@ class TemaView
 						Tema</button>
 					<button class="btn-reload" onclick="location.href='?frase/loadDatabase'">Recargar</button>
 					<button class="btn-nav" onclick="location.href='?autor/show'">Autores</button>
-					<button class="btn-nav">Temas</button>
+					<button class="btn-nav" onclick="location.href='?tema/show'">Temas</button>
 					<button class="btn-nav" onclick="location.href='?frase/show'">Frases</button>
 				</div>
 				<table>
@@ -60,6 +60,25 @@ class TemaView
 					?>
 
 				</table>
+				<div class="pagination">
+					<!-- Si no es la primera página, muestro el botón de anterior -->
+					<?php if ($actualPage > 1): ?>
+						<button onclick="location.href='?autor/show/<?= $actualPage - 1 ?>'">Anterior</button>
+					<?php endif; ?>
+
+					<span>Página <?= $actualPage ?> de <?= $totalPages ?></span>
+
+					<!-- Si no es la primera página, muestro el botón de siguiente -->
+					<?php if ($actualPage < $totalPages): ?>
+						<button onclick="location.href='?autor/show/<?= $actualPage + 1 ?>'">Siguiente</button>
+					<?php endif; ?>
+
+					<form method="POST" action="">
+						<label for="page">Buscar página</label>
+						<input type="number" id="page" name="page" min="1" max="<?= $totalPages ?>" required>
+						<button type="submit">Ir</button>
+					</form>
+				</div>
 			</div>
 
 		</body>
@@ -93,7 +112,7 @@ class TemaView
 						Tema</button>
 					<button class="btn-reload" onclick="location.href='?frase/loadDatabase'">Recargar</button>
 					<button class="btn-nav" onclick="location.href='?autor/show'">Autores</button>
-					<button class="btn-nav">Temas</button>
+					<button class="btn-nav" onclick="location.href='?tema/show'">Temas</button>
 					<button class="btn-nav" onclick="location.href='?frase/show'">Frases</button>
 				</div>
 
@@ -108,36 +127,6 @@ class TemaView
 						<button type="submit" class="btn-submit">Guardar</button>
 					</form>
 				</div>
-
-				<table>
-					<thead>
-						<tr>
-							<th style="width: 50%;">Topic</th>
-							<th>Num</th>
-							<th>Acciones</th>
-						</tr>
-					</thead>
-
-					<?php
-					foreach ($temaList as $tema) {
-						$themeId = $tema->id;
-						$themeName = $tema->name;
-						$themeTotalPhrases = $tema->totalPhrases;
-
-						echo " <tbody>
-									<tr>
-										<td>$themeName</td>
-										<td>$themeTotalPhrases</td>
-										<td>";
-						echo '<button style:"widht:20%;" class="btn-edit" onclick="location.href=\'?tema/editForm/' . $themeId . '\'">Editar</button>';
-						echo "   <button class=\"btn-delete\" onclick=\"location.href='?tema/deleteTema/" . $themeId . " '\"> Eliminar</button>
-										</td>   
-									</tr>
-								</tbody>";
-					}
-					?>
-
-				</table>
 			</div>
 
 		</body>
@@ -170,7 +159,7 @@ class TemaView
 						Tema</button>
 					<button class="btn-reload" onclick="location.href='?frase/loadDatabase'">Recargar</button>
 					<button class="btn-nav" onclick="location.href='?autor/show'">Autores</button>
-					<button class="btn-nav">Temas</button>
+					<button class="btn-nav" onclick="location.href='?tema/show'">Temas</button>
 					<button class="btn-nav" onclick="location.href='?frase/show'">Frases</button>
 				</div>
 
@@ -182,36 +171,6 @@ class TemaView
 						<button type="submit" class="btn-submit">Guardar</button>
 					</form>
 				</div>
-
-				<table>
-					<thead>
-						<tr>
-							<th style="width: 50%;">Topic</th>
-							<th>Num</th>
-							<th>Acciones</th>
-						</tr>
-					</thead>
-
-					<?php
-					foreach ($temaList as $tema) {
-						$themeId = $tema->id;
-						$themeName = $tema->name;
-						$themeTotalPhrases = $tema->totalPhrases;
-
-						echo " <tbody>
-									<tr>
-										<td>$themeName</td>
-										<td>$themeTotalPhrases</td>
-										<td>";
-						echo '<button style:"widht:20%;" class="btn-edit" onclick="location.href=\'?tema/editForm/' . $themeId . '\'">Editar</button>';
-						echo "   <button class=\"btn-delete\" onclick=\"location.href='?tema/deleteTema/" . $themeId . " '\"> Eliminar</button>
-										</td>   
-									</tr>
-								</tbody>";
-					}
-					?>
-
-				</table>
 			</div>
 
 		</body>

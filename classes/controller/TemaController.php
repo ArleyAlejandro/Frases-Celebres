@@ -7,6 +7,10 @@ class TemaController
     private $model;
     private $view;
     private $tema;
+    private $limit;
+    private $offset;
+    private $actualPage;
+    private $totalPages;
 
     public function __construct()
     {
@@ -17,8 +21,32 @@ class TemaController
 
     public function show($params = null)
     {
-        $this->getTemas();
-        $this->view->show($this->themeList);
+
+           /**
+         * Verifico si el número de página me llega por get o por post, si me llega por get significa que se ha hecho click en 
+         * un botón de siguiente o anterior, si llega por post significa que se ha introducido un número de página 
+         * manualmente en el input.
+         */
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Número de página específica que se ha introducido en el input
+            $this->actualPage = $params["page"];
+        }
+        if ($_SERVER["REQUEST_METHOD"] == "GET") {
+            // Página actual por parámetros desde la vista, o sino la inicializo como 1
+            $this->actualPage = isset($params[0]) ? (int)$params[0] : 1;
+        }
+
+        // Límite de páginas a mostrar
+        $this->limit = 10;
+        // Variable para decidir en sql a partir de q registro mostrar el límite
+        $this->offset = ($this->actualPage - 1) * $this->limit;
+        // Total de frases
+        $totalFrases = count($this->model->selectAll());
+        // Divido el total de frases por el límite para saber cuantas páginas me quedarán, además redondeo hacia arriba
+        $this->totalPages = ceil($totalFrases / $this->limit);
+
+        $this->getTemas($this->limit, $this->offset);
+        $this->view->show($this->themeList, $this->actualPage, $this->totalPages);
     }
 
     public function form($params)
@@ -99,10 +127,9 @@ class TemaController
         header("location: ?tema/show");
     }
 
-    private function getTemas()
+    private function getTemas($limit=null, $offset=null)
     {
-
-        $this->themeList = $this->model->selectAll();
+        $this->themeList = $this->model->selectAll($limit, $offset);
 
         foreach ($this->themeList as &$tema) {
             $themeName = $tema->name;
