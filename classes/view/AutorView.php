@@ -88,7 +88,7 @@ class AutorView
 	<?php
 	}
 
-	public function form($authorList, Autor $autor, $actualPage, $totalPages)
+	public function form($authorList, Autor $autor)
 	{
 		$name = $autor->name;
 		$description = $autor->description;
@@ -133,37 +133,6 @@ class AutorView
 						<button type="submit" class="btn-submit">Guardar</button>
 					</form>
 				</div>
-
-				<table>
-					<thead>
-						<tr>
-							<th>ID</th>
-							<th>Autor</th>
-							<th>Descripción</th>
-							<th>Num</th>
-							<th>Acciones</th>
-						</tr>
-					</thead>
-					<?php
-
-					foreach ($authorList as $autor) {
-
-						echo " <tbody>
-                                <tr>
-                                   <td>$autor->id</td>
-                                   <td>$autor->name</td>
-                                    <td>$autor->description</td>
-                                    <td>$autor->phrases</td>
-                                                    <td>";
-						echo '<button class="btn-edit" onclick="location.href=\'?autor/editForm/' . $autor->id . '\'">Editar</button>';
-						echo "<button class=\"btn-delete\"> Eliminar</button>
-                                    </td>   
-                                </tr>
-                            </tbody>";
-					}
-					?>
-				</table>
-				
 			</div>
 
 		</body>
@@ -172,7 +141,7 @@ class AutorView
 	<?php
 	}
 
-	public function editForm($authorList, $author, $actualPage, $totalPages)
+	public function editForm($authorList, $author)
 	{
 		$id = $author->id;
 		$name = $author->name;
@@ -213,37 +182,6 @@ class AutorView
 						<button type="submit" class="btn-submit">Guardar</button>
 					</form>
 				</div>
-
-				<table>
-					<thead>
-						<tr>
-							<th>ID</th>
-							<th>Autor</th>
-							<th>Descripción</th>
-							<th>Num</th>
-							<th>Acciones</th>
-						</tr>
-					</thead>
-					<?php
-
-					foreach ($authorList as $autor) {
-
-						echo " <tbody>
-                        <tr>
-                            <td>$autor->id</td>
-                                   <td>$autor->name</td>
-                                    <td>$autor->description</td>
-                                    <td>$autor->phrases</td>
-                                           <td>
-                    <button class=\"btn-edit\" onclick=\"location.href='?autor/editForm/" . $autor->id. " '\">Editar</button>                   
-                    <button class=\"btn-delete\"> Eliminar</button>
-                            </td>   
-                        </tr>
-                    </tbody>";
-					}
-
-					?>
-				</table>
 			</div>
 
 		</body>
