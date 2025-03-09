@@ -144,8 +144,6 @@ class AutorController
              */
             $total_frases = $this->model->countPhrases($autor->id)->total_frases;
             $autor->phrases = $total_frases;
-            // echo "el autor $autor->name tiene un total de $total_frases<br>";
         }
-        // die;
     }
 }
