@@ -97,7 +97,13 @@ tbody tr:hover {
 .error{
 	color: red; 
 }
-
-/* .pagination{
-	background-color: #007BFF;
-} */
+#errorBody{
+	.container{
+		p{
+			color: red;
+			font-size: 1.5rem;
+			font-weight: bold;
+			
+		}
+	}
+}

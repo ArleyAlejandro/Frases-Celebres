@@ -16,10 +16,9 @@ try {
         "BussinesObject"
     ]);
     $autoload->registrar();
-    
+
     FrontController::procesarSolicitud();
 } catch (Exception $e) {
-//     ErrorView::show($e);
-    echo "Error: " . $e->getMessage();
-   
+        ErrorView::show($e);
+    // echo "Error: " . $e->getMessage();
 }
